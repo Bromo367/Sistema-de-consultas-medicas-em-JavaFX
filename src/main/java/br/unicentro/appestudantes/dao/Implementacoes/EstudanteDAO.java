@@ -1,4 +1,4 @@
-package br.unicentro.appestudantes.dao;
+package br.unicentro.appestudantes.dao.Implementacoes;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 
+import br.unicentro.appestudantes.dao.Interfaces.IEstudante;
 import br.unicentro.appestudantes.model.Estudante;
 
 public class EstudanteDAO implements IEstudante {

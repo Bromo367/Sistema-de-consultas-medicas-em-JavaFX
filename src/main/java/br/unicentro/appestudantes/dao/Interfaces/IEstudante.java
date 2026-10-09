@@ -1,4 +1,4 @@
-package br.unicentro.appestudantes.dao;
+package br.unicentro.appestudantes.dao.Interfaces;
 
 import java.sql.SQLException;
 

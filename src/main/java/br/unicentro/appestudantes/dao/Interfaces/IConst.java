@@ -1,4 +1,4 @@
-package br.unicentro.appestudantes.dao;
+package br.unicentro.appestudantes.dao.Interfaces;
 
 public interface IConst {
 

@@ -2,7 +2,7 @@ package br.unicentro.appestudantes.controller;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import br.unicentro.appestudantes.dao.EstudanteDAO;
+import br.unicentro.appestudantes.dao.Implementacoes.EstudanteDAO;
 import br.unicentro.appestudantes.main.GerenciadorTelas;
 import br.unicentro.appestudantes.model.Estudante;
 import javafx.fxml.FXML;

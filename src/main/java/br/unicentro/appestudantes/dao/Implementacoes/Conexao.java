@@ -1,8 +1,10 @@
-package br.unicentro.appestudantes.dao;
+package br.unicentro.appestudantes.dao.Implementacoes;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+
+import br.unicentro.appestudantes.dao.Interfaces.IConst;
 
 public class Conexao implements IConst {
 
