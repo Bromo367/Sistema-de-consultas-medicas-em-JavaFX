@@ -35,32 +35,55 @@ public class ConsultaDAO implements IConsulta{
     }
 
     @Override 
-	public List<Consulta> busca(int cpfPaciente, int crmMedico, String data) throws SQLException{
-        String sql = "SELECT * FROM estudante ORDER BY estudante_id";
+	public List<Consulta> busca(String cpfPaciente, String crmMedico, String data) throws SQLException{
+        String sql = "SELECT * FROM estudante WHERE ";
+        List<String> strsBusca = new ArrayList<>();
+        if(cpfPaciente == null && crmMedico == null && data == null){
+            return listaTodos();
+        }
+        if(cpfPaciente!=null){
+            sql=sql+"cpfPaciente = ? AND ";
+            strsBusca.add(cpfPaciente);
+        }
+        if(crmMedico!=null){
+            sql=sql+"crmMedico = ? AND ";
+            strsBusca.add(crmMedico);
+        }
+        if(data!=null){
+            sql=sql+"data = ? AND ";
+            strsBusca.add(data);
+        }
+        sql=sql.substring(0, sql.length()-5)+" ORDER BY cpfPaciente";
         List<Consulta> consultas = new ArrayList<>();
-
+        
         try (Connection con = Conexao.getConexao();
-             PreparedStatement stmt = con.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-             while (rs.next()) {
-                consultas.add(new Consulta(rs.getString("cpfPaciente"),rs.getString("crmMedico"),rs.getString("data")));
-             }
+            PreparedStatement stmt = con.prepareStatement(sql)){
+            int i=1;
+            for(String str:strsBusca){
+                stmt.setString(i,str);
+                i++;
+            }
+            try(ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    consultas.add(new Consulta(rs.getString("cpfPaciente"),rs.getString("crmMedico"),rs.getString("data")));
+                }
+                
+            }
         }
         return consultas;
-    
     }
 
     @Override
 	public List<Consulta> listaTodos() throws SQLException{
-        String sql = "SELECT * FROM estudante ORDER BY estudante_id";
+        String sql = "SELECT * FROM consulta ORDER BY cpfPaciente";
         List<Consulta> consultas = new ArrayList<>();
 
         try (Connection con = Conexao.getConexao();
-             PreparedStatement stmt = con.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-             while (rs.next()) {
+            PreparedStatement stmt = con.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
                 consultas.add(new Consulta(rs.getString("cpfPaciente"),rs.getString("crmMedico"),rs.getString("data")));
-             }
+            }
         }
         return consultas;
     }
