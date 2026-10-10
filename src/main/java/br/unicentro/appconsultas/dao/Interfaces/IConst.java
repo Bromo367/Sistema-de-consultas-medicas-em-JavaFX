@@ -1,4 +1,4 @@
-package br.unicentro.appconsultas.dao.Interfaces;
+package br.unicentro.appconsultas.dao.interfaces;
 
 public interface IConst {
 

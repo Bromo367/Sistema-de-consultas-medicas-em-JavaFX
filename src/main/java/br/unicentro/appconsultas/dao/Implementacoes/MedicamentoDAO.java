@@ -1,4 +1,4 @@
-package br.unicentro.appconsultas.dao.Implementacoes;
+package br.unicentro.appconsultas.dao.implementacoes;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,13 +7,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.unicentro.appconsultas.dao.Interfaces.IMedicamento;
+import br.unicentro.appconsultas.dao.interfaces.IMedicamento;
 import br.unicentro.appconsultas.model.Medicamento;
 
 public class MedicamentoDAO implements IMedicamento{
     @Override
     public void insere(Medicamento medicamento) throws SQLException {
-        String sql = "INSERT INTO estudante (nome) VALUES (?) RETURNING estudante_id";
+        String sql = "INSERT INTO medico (nome) VALUES (?) RETURNING medicamentoId";
         try (Connection con = Conexao.getConexao();
             PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setString(1, medicamento.getNome());
@@ -41,7 +41,7 @@ public class MedicamentoDAO implements IMedicamento{
         try (Connection con = Conexao.getConexao();
             PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setString(1, medicamento.getNome());
-            stmt.setInt(3, medicamento.getMedicamentoId());
+            stmt.setInt(2, medicamento.getMedicamentoId());
             stmt.executeUpdate();
         }
     }

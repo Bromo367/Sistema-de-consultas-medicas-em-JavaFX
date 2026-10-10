@@ -1,4 +1,4 @@
-package br.unicentro.appconsultas.dao.Implementacoes;
+package br.unicentro.appconsultas.dao.implementacoes;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.unicentro.appconsultas.dao.Interfaces.IConsulta;
+import br.unicentro.appconsultas.dao.interfaces.IConsulta;
 import br.unicentro.appconsultas.model.Consulta;
 
 public class ConsultaDAO implements IConsulta{
@@ -19,6 +19,7 @@ public class ConsultaDAO implements IConsulta{
             stmt.setString(1, consulta.getCpfPaciente());
             stmt.setString(2, consulta.getCrmMedico());
             stmt.setString(3, consulta.getData());
+            stmt.executeQuery();
         }
     }
 
