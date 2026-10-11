@@ -1,0 +1,49 @@
+CREATE DATABASE sistema_consultas;
+\c sistema_consultas
+
+CREATE TABLE paciente(
+	cpfPaciente CHAR(11),
+	nome VARCHAR(60) NOT NULL,
+	idade INT,
+	peso NUMERIC(5,2),
+	altura NUMERIC(5,2),
+	telefone VARCHAR(13),
+	CONSTRAINT pk_paciente PRIMARY KEY (cpfPaciente)	
+);
+
+CREATE TABLE medico(
+	crmMedico VARCHAR(13),
+	nome VARCHAR(60) NOT NULL,
+	especializacao VARCHAR(60),
+	telefone VARCHAR(13),
+	CONSTRAINT pk_medico PRIMARY KEY (crmMedico)	
+);
+
+CREATE TABLE consulta(
+	cpfPaciente CHAR(11),
+	crmMedico VARCHAR(13),
+	data DATE,
+	CONSTRAINT pk_consulta PRIMARY KEY (cpfPaciente, crmMedico, data),
+	CONSTRAINT fk_consulta_paciente FOREIGN KEY (cpfPaciente) REFERENCES paciente(cpfPaciente) ON UPDATE CASCADE ON DELETE NO ACTION,
+	CONSTRAINT fk_consulta_medico FOREIGN KEY (crmMedico) REFERENCES medico(crmMedico) ON UPDATE CASCADE ON DELETE NO ACTION
+);
+
+CREATE TABLE medicamento(
+	medicamentoId SERIAL,
+	nome VARCHAR(30) NOT NULL,
+	CONSTRAINT pk_medicamento PRIMARY KEY (medicamentoId)
+);
+
+CREATE TABLE receita(
+	cpfPaciente CHAR(11),
+	crmMedico VARCHAR(13),
+	data DATE,
+	medicamentoId INT,
+	dose NUMERIC (8,2),
+	unidadeMedida VARCHAR(4),
+	intervalo TEXT,
+	CONSTRAINT pk_receita PRIMARY KEY (cpfPaciente, crmMedico, data, medicamentoId),
+	CONSTRAINT fk_receita_consulta FOREIGN KEY (cpfPaciente, crmMedico, data) REFERENCES consulta(cpfPaciente, crmMedico, data) ON UPDATE CASCADE ON DELETE NO ACTION,
+	CONSTRAINT fk_receita_medicamento FOREIGN KEY (medicamentoId) REFERENCES medicamento(medicamentoId) ON UPDATE CASCADE ON DELETE NO ACTION
+
+);	
