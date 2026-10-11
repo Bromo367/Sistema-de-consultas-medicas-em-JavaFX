@@ -68,14 +68,18 @@ public class MedicoDAO implements IMedico{
 
     @Override
 	public List<Medico> listaTodos() throws SQLException{
-        String sql = "SELECT * FROM medico ORDER BY medicoId";
+        String sql = "SELECT * FROM medico ORDER BY crmMedico";
         List<Medico> medicos = new ArrayList<>();
 
         try (Connection con = Conexao.getConexao();
             PreparedStatement stmt = con.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
-                medicos.add(new Medico(rs.getString("crmMedico"),rs.getString("nome"),rs.getString("especializacao"),rs.getString("telefone")));
+                String crmMedico = rs.getString("crmMedico");
+                String nome = rs.getString("nome");
+                String especializacao = rs.getString("especializacao");
+                String telefone = rs.getString("telefone");
+                medicos.add(new Medico(crmMedico, nome, especializacao, telefone));
             }
         }
         return medicos;

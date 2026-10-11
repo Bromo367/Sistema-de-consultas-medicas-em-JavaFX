@@ -12,7 +12,7 @@ public interface IPaciente {
 
 	public void remove(Paciente paciente) throws SQLException;
 
-	public List<Paciente> busca(int cpfPaciente) throws SQLException;
+	public Paciente buscaPorCodigo(String cpfPaciente) throws SQLException;
 
 	public List<Paciente> listaTodos() throws SQLException;
 }
