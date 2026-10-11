@@ -1,4 +1,4 @@
-package br.unicentro.appconsultas.dao.Interfaces;
+package br.unicentro.appconsultas.dao.interfaces;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -12,7 +12,7 @@ public interface IPaciente {
 
 	public void remove(Paciente paciente) throws SQLException;
 
-	public List<Paciente> busca(int cpfPaciente) throws SQLException;
+	public Paciente buscaPorCodigo(String cpfPaciente) throws SQLException;
 
 	public List<Paciente> listaTodos() throws SQLException;
 }

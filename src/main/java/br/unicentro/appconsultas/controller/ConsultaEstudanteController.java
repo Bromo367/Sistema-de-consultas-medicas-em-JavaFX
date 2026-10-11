@@ -2,8 +2,8 @@ package br.unicentro.appconsultas.controller;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import br.unicentro.appconsultas.dao.Implementacoes.EstudanteDAO;
-import br.unicentro.appconsultas.dao.Interfaces.IEstudante;
+import br.unicentro.appconsultas.dao.implementacoes.EstudanteDAO;
+import br.unicentro.appconsultas.dao.interfaces.IEstudante;
 import br.unicentro.appconsultas.main.GerenciadorTelas;
 import br.unicentro.appconsultas.model.Estudante;
 import javafx.fxml.FXML;

@@ -1,4 +1,4 @@
-package br.unicentro.appconsultas.dao.Interfaces;
+package br.unicentro.appconsultas.dao.interfaces;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -10,7 +10,7 @@ public interface IConsulta {
 
 	public void remove(Consulta consulta) throws SQLException;
 
-	public List<Consulta> busca(int cpfPaciente, int crmMedico, String data) throws SQLException;
+	public List<Consulta> busca(String cpfPaciente, String crmMedico, String data) throws SQLException;
 
 	public List<Consulta> listaTodos() throws SQLException;
 }
