@@ -9,36 +9,36 @@ import javafx.fxml.FXML;
 public class MenusController {
 
     @FXML
-    private void incluiOnAction(ActionEvent event) {
+    private void btnInicioOnAction(ActionEvent event) {
         try {
-            GerenciadorTelas.trocarTela("/br/unicentro/appestudantes/view/IncluiEstudante.fxml","Incluir Estudante");
+            GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Inicio.fxml","Inicio");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     @FXML
-    private void alteraOnAction(ActionEvent event) {
+    private void btnMedicoOnAction(ActionEvent event) {
         try {
-            GerenciadorTelas.trocarTela("/br/unicentro/appestudantes/view/TelaVazia.fxml","Alterar Estudante");
+            GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Medico.fxml","Medico");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     @FXML
-    private void consultaOnAction(ActionEvent event) {
+    private void btnConsultasOnAction(ActionEvent event) {
         try {
-            GerenciadorTelas.trocarTela("/br/unicentro/appestudantes/view/ConsultaEstudante.fxml","Consultar Estudante");
+            GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Consultas.fxml","Consultas");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     @FXML
-    private void telaVaziaOnAction(ActionEvent event) {
+    private void btnReceitaOnAction(ActionEvent event) {
         try {
-            GerenciadorTelas.trocarTela("/br/unicentro/appestudantes/view/TelaVazia.fxml","Professor");
+            GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Receita.fxml","Receita");
         } catch (IOException e) {
             e.printStackTrace();
         }

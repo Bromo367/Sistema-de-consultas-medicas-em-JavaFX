@@ -12,7 +12,7 @@
       spacing="25.0"
       xmlns="http://javafx.com/javafx/26"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="br.unicentro.appestudantes.controller.TelaVaziaController">
+      fx:controller="br.unicentro.appconsultas.controller.TelaVaziaController">
 
     <padding>
         <Insets top="30.0"

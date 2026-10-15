@@ -16,7 +16,7 @@ public class Main extends Application {
         stage.setResizable(false);
 
         // Abre a primeira tela da aplicação.
-        GerenciadorTelas.trocarTela("/br/unicentro/appestudantes/view/Menus.fxml","Estudantes");
+        GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Inicio.fxml","Inicio");
     }
 
     public static void main(String[] args) {

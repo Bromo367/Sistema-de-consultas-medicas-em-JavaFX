@@ -15,7 +15,7 @@
       spacing="20.0"
       xmlns="http://javafx.com/javafx/26"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="br.unicentro.appestudantes.controller.IncluiEstudanteController">
+      fx:controller="br.unicentro.appconsultas.controller.IncluiEstudanteController">
 
     <padding>
         <Insets top="30.0"

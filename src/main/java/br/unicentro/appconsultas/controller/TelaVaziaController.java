@@ -10,7 +10,7 @@ public class TelaVaziaController {
     @FXML
     private void btnVoltarOnAction() {
         try {
-            GerenciadorTelas.trocarTela("/br/unicentro/appestudantes/view/Menus.fxml","Estudantes");
+            GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Menus.fxml","Estudantes");
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -96,7 +96,7 @@ public class IncluiEstudanteController {
     private void btnVoltarOnAction() {
         try {
             // retorna para a tela de menu utilizando o mesmo Stage.
-            GerenciadorTelas.trocarTela("/br/unicentro/appestudantes/view/Menus.fxml","Estudantes");
+            GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Menus.fxml","Estudantes");
         } catch (IOException e) {
             e.printStackTrace();
         }
