@@ -38,7 +38,7 @@ public class InicioController {
     @FXML
     private void btnReceitasOnAction(ActionEvent event) {
         try {
-            GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Receita.fxml","Receita");
+            GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Receita.fxml","Receitas");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -55,7 +55,11 @@ public class InicioController {
 
     @FXML
     private void btnMedicamentosOnAction(ActionEvent event) {
-        // Implementar quando Medicamentos.fxml estiver pronto.
+        try {
+            GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Medicamento.fxml","Pacientes");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -83,7 +87,11 @@ public class InicioController {
 
     @FXML
     private void btnNovaReceitaOnAction(ActionEvent event) {
-        // Implementar depois.
+        try {
+            GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Receita.fxml","Receitas");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 

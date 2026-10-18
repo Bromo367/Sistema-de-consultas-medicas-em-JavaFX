@@ -1,8 +1,8 @@
 br/unicentro/appconsultas/dao/implementacoes/MedicamentoDAO.class
 br/unicentro/appconsultas/dao/interfaces/IConst.class
 br/unicentro/appconsultas/dao/interfaces/IMedicamento.class
-br/unicentro/appconsultas/dao/implementacoes/EstudanteDAO.class
 br/unicentro/appconsultas/model/Medico.class
+br/unicentro/appconsultas/controller/MedicamentoController.class
 br/unicentro/appconsultas/dao/interfaces/IConsulta.class
 br/unicentro/appconsultas/model/Paciente.class
 br/unicentro/appconsultas/dao/interfaces/IMedico.class
@@ -15,12 +15,11 @@ br/unicentro/appconsultas/controller/PacienteController.class
 br/unicentro/appconsultas/controller/InicioController.class
 br/unicentro/appconsultas/model/Consulta.class
 br/unicentro/appconsultas/dao/interfaces/IBanco.class
-br/unicentro/appconsultas/dao/interfaces/IEstudante.class
 br/unicentro/appconsultas/model/Medicamento.class
 br/unicentro/appconsultas/dao/implementacoes/Conexao.class
 br/unicentro/appconsultas/dao/implementacoes/BancoDAO.class
+br/unicentro/appconsultas/controller/ReceitaController.class
 br/unicentro/appconsultas/dao/implementacoes/MedicoDAO.class
-br/unicentro/appconsultas/model/Estudante.class
 br/unicentro/appconsultas/dao/implementacoes/PacienteDAO.class
 br/unicentro/appconsultas/dao/implementacoes/ReceitaDAO.class
 br/unicentro/appconsultas/dao/interfaces/IReceita.class

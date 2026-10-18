@@ -58,7 +58,7 @@ public class ReceitaDAO implements IReceita{
 
     @Override
     public List<Receita> busca(String cpfPaciente, String crmMedico, String data, int medicamentoId) throws SQLException {
-        String sql = "SELECT * FROM estudante WHERE ";
+        String sql = "SELECT * FROM receita WHERE ";
         List<String> strsBusca = new ArrayList<>();
         if(cpfPaciente == null && crmMedico == null && data == null && medicamentoId < 0){
             return listaTodos();

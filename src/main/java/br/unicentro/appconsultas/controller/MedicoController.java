@@ -55,7 +55,11 @@ public class MedicoController {
 
     @FXML
     private void btnMedicamentosOnAction(ActionEvent event) {
-        // Implementar quando Medicamentos.fxml estiver pronto.
+        try {
+            GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Paciente.fxml","Pacientes");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
