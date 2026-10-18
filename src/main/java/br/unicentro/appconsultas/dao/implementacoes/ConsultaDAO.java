@@ -37,7 +37,7 @@ public class ConsultaDAO implements IConsulta{
 
     @Override 
 	public List<Consulta> busca(String cpfPaciente, String crmMedico, String data) throws SQLException{
-        String sql = "SELECT * FROM estudante WHERE ";
+        String sql = "SELECT * FROM consulta WHERE ";
         List<String> strsBusca = new ArrayList<>();
         if(cpfPaciente == null && crmMedico == null && data == null){
             return listaTodos();
