@@ -12,6 +12,7 @@ br/unicentro/appconsultas/dao/implementacoes/ConsultaDAO.class
 br/unicentro/appconsultas/main/GerenciadorTelas.class
 br/unicentro/appconsultas/controller/MedicoController.class
 br/unicentro/appconsultas/controller/PacienteController.class
+br/unicentro/appconsultas/controller/ConsultaController.class
 br/unicentro/appconsultas/controller/InicioController.class
 br/unicentro/appconsultas/model/Consulta.class
 br/unicentro/appconsultas/dao/interfaces/IBanco.class
