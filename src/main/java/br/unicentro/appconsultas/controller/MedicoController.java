@@ -6,7 +6,7 @@ import br.unicentro.appconsultas.main.GerenciadorTelas;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
-public class MenusController {
+public class MedicoController {
 
     @FXML
     private void btnInicioOnAction(ActionEvent event) {
@@ -18,7 +18,7 @@ public class MenusController {
     }
 
     @FXML
-    private void btnMedicoOnAction(ActionEvent event) {
+    private void btnMedicosOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Medico.fxml","Medico");
         } catch (IOException e) {
@@ -36,12 +36,46 @@ public class MenusController {
     }
 
     @FXML
-    private void btnReceitaOnAction(ActionEvent event) {
+    private void btnReceitasOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Receita.fxml","Receita");
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void btnPacientesOnAction(ActionEvent event) {
+        try {
+            GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Paciente.fxml","Pacientes");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void btnMedicamentosOnAction(ActionEvent event) {
+        // Implementar quando Medicamentos.fxml estiver pronto.
+    }
+
+    @FXML
+    private void btnCadastrarMedicoOnAction(ActionEvent event) {
+        // Implementar o cadastro depois.
+    }
+
+    @FXML
+    private void btnBuscarMedicoOnAction(ActionEvent event) {
+        // Implementar a busca depois.
+    }
+
+    @FXML
+    private void btnAtualizarMedicoOnAction(ActionEvent event) {
+        // Implementar a atualização depois.
+    }
+
+    @FXML
+    private void btnRemoverMedicoOnAction(ActionEvent event) {
+        // Implementar a remoção depois.
     }
 }
 
