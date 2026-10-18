@@ -188,7 +188,7 @@
                                  </GridPane.margin>
                               </Label>
                               <TextField fx:id="txtBuscarMedicamentoId" GridPane.columnIndex="1" />
-                              <Button fx:id="btnBuscarPaciente" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#btnBuscarPacienteOnAction" prefHeight="35.0" prefWidth="220.0" text="Buscar" GridPane.rowIndex="1">
+                              <Button fx:id="btnBuscarPaciente" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#btnBuscarMedicamentoOnAction" prefHeight="35.0" prefWidth="220.0" text="Buscar" GridPane.rowIndex="1">
                                  <font>
                                     <Font size="18.0" />
                                  </font>

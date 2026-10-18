@@ -82,7 +82,11 @@ public class InicioController {
 
     @FXML
     private void btnNovaConsultaOnAction(ActionEvent event) {
-        // Implementar depois.
+        try {
+            GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Consultas.fxml","Consultas");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
