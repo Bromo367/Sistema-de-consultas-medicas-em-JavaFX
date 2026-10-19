@@ -46,4 +46,7 @@ CREATE TABLE receita(
 	CONSTRAINT fk_receita_consulta FOREIGN KEY (cpfPaciente, crmMedico, data) REFERENCES consulta(cpfPaciente, crmMedico, data) ON UPDATE CASCADE ON DELETE NO ACTION,
 	CONSTRAINT fk_receita_medicamento FOREIGN KEY (medicamentoId) REFERENCES medicamento(medicamentoId) ON UPDATE CASCADE ON DELETE NO ACTION
 
+ALTER TABLE receita
+DROP CONSTRAINT fk_receita_consulta;
+
 );	
