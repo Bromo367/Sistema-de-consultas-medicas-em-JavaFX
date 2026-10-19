@@ -20,7 +20,7 @@ public class MedicoDAO implements IMedico{
             stmt.setString(2, medico.getNome());
             stmt.setString(3, medico.getEspecializacao());
             stmt.setString(4, medico.getTelefone());
-            stmt.executeQuery();
+            stmt.executeUpdate();
         }
     }
 

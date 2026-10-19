@@ -1,12 +1,29 @@
 package br.unicentro.appconsultas.controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import br.unicentro.appconsultas.main.GerenciadorTelas;
+import br.unicentro.appconsultas.dao.implementacoes.MedicamentoDAO;
+import br.unicentro.appconsultas.model.Medicamento;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 
 public class MedicamentoController {
+
+    @FXML private TextField txtNome, txtMedicamentoId;
+    @FXML private Label lblConfirmarCadastro;
+    @FXML private TextField txtBuscarMedicamentoId;
+    @FXML private Label lblNomeBuscar, lblConfirmarBuscar;
+    @FXML private TextField txtAtualizarNome, txtAtualizarMedicamentoId;
+    @FXML private Label lblConfirmarAtualizar;
+    @FXML private TextField txtRemoverMedicamentoId;
+    @FXML private Label lblConfirmarRemover;
+
+    private final MedicamentoDAO medicamentoDAO = new MedicamentoDAO();
 
     @FXML
     private void btnInicioOnAction(ActionEvent event) {
@@ -62,24 +79,171 @@ public class MedicamentoController {
         }
     }
 
-    @FXML
-    private void btnCadastrarMedicamentoOnAction(ActionEvent event) {
-        // Implementar o cadastro depois.
+    @FXML 
+    private void btnCadastrarMedicamentoOnAction(ActionEvent e) {
+        String idTexto = txtMedicamentoId.getText().trim();
+        String nome = txtNome.getText().trim();
+
+        if (idTexto.isEmpty() || nome.isEmpty()) {
+            mostraMensagem(
+                lblConfirmarCadastro,
+                "Preencha o código e o nome do medicamento.",
+                false
+            );
+            return;
+        }
+
+        try {
+            int id = Integer.parseInt(idTexto);
+
+            if (id <= 0) {
+                mostraMensagem(
+                    lblConfirmarCadastro,
+                    "O código deve ser um número positivo.",
+                    false
+                );
+                return;
+            }
+
+            if (medicamentoDAO.buscaPorCodigo(id) != null) {
+                mostraMensagem(
+                    lblConfirmarCadastro,
+                    "Já existe um medicamento com esse código.",
+                    false
+                );
+                return;
+            }
+
+            medicamentoDAO.insere(new Medicamento(id, nome));
+
+            mostraMensagem(
+                lblConfirmarCadastro,
+                "Medicamento cadastrado com sucesso!",
+                true
+            );
+
+            txtMedicamentoId.clear();
+            txtNome.clear();
+
+        } catch (NumberFormatException ex) {
+            mostraMensagem(
+                lblConfirmarCadastro,
+                "O código deve ser um número inteiro.",
+                false
+            );
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            mostraMensagem(
+                lblConfirmarCadastro,
+                "Erro ao cadastrar medicamento. Verifique o banco de dados.",
+                false
+            );
+        }
     }
 
-    @FXML
-    private void btnBuscarMedicamentoOnAction(ActionEvent event) {
-        // Implementar a busca depois.
+    @FXML 
+    private void btnBuscarMedicamentoOnAction(ActionEvent e) {
+        String idTexto = txtBuscarMedicamentoId.getText().trim(); 
+        
+        if (idTexto.isEmpty()) { 
+            mostraMensagem(lblConfirmarBuscar, "Digite o código do medicamento.", false); 
+            lblNomeBuscar.setText(""); 
+            return; 
+        }
+        
+        try { 
+            int id = Integer.parseInt(idTexto); 
+            Medicamento m = medicamentoDAO.buscaPorCodigo(id); 
+            
+            if (m == null) { 
+                mostraMensagem(lblConfirmarBuscar, "Medicamento não encontrado.", false); 
+                lblNomeBuscar.setText(""); 
+                return; 
+            } 
+            
+            lblNomeBuscar.setText("Código: " + m.getMedicamentoId() + " | Nome: " + m.getNome()); 
+            mostraMensagem(lblConfirmarBuscar, "Medicamento encontrado.", true); 
+            
+        } catch (NumberFormatException ex) { 
+            mostraMensagem(lblConfirmarBuscar, "O código deve ser um número inteiro.", false); 
+        } catch (SQLException ex) { 
+            ex.printStackTrace(); 
+            mostraMensagem(lblConfirmarBuscar, "Erro ao consultar o banco de dados.", false); 
+        }
     }
 
-    @FXML
-    private void btnAtualizarMedicamentoOnAction(ActionEvent event) {
-        // Implementar a atualização depois.
+    @FXML 
+    private void btnAtualizarMedicamentoOnAction(ActionEvent e) {
+        String idTexto = txtAtualizarMedicamentoId.getText().trim();
+        String nome = txtAtualizarNome.getText().trim(); 
+        
+        if (idTexto.isEmpty() || nome.isEmpty()) { 
+            mostraMensagem(lblConfirmarAtualizar, "Preencha o código e o nome.", false); 
+            return; 
+        }
+        
+        try { 
+            int id = Integer.parseInt(idTexto); 
+            
+            if (medicamentoDAO.buscaPorCodigo(id) == null) { 
+                mostraMensagem(lblConfirmarAtualizar, "Medicamento não encontrado.", false); 
+                return; 
+            } 
+            
+            medicamentoDAO.atualiza(new Medicamento(id, nome)); 
+            mostraMensagem(lblConfirmarAtualizar, "Medicamento atualizado com sucesso!", true); 
+            
+        } catch (NumberFormatException ex) { 
+            mostraMensagem(lblConfirmarAtualizar, "O código deve ser um número inteiro.", false); 
+        } catch (SQLException ex) { 
+            ex.printStackTrace(); 
+            mostraMensagem(lblConfirmarAtualizar, "Erro ao atualizar medicamento.", false); 
+        }
     }
 
-    @FXML
-    private void btnRemoverMedicamentoOnAction(ActionEvent event) {
-        // Implementar a remoção depois.
+    @FXML 
+    private void btnRemoverMedicamentoOnAction(ActionEvent e) {
+        String idTexto = txtRemoverMedicamentoId.getText().trim(); 
+        
+        if (idTexto.isEmpty()) { 
+            mostraMensagem(lblConfirmarRemover, "Digite o código do medicamento.", false); 
+            return; 
+        }
+        
+        try { 
+            int id = Integer.parseInt(idTexto); 
+            Medicamento m = medicamentoDAO.buscaPorCodigo(id); 
+            
+            if (m == null) { 
+                mostraMensagem(lblConfirmarRemover, "Medicamento não encontrado.", false); 
+                return; 
+            } 
+            
+            medicamentoDAO.remove(m); 
+            mostraMensagem(lblConfirmarRemover, "Medicamento removido com sucesso!", true); 
+            txtRemoverMedicamentoId.clear(); 
+            
+        } catch (NumberFormatException ex) { 
+            mostraMensagem(lblConfirmarRemover, "O código deve ser um número inteiro.", false); 
+        } catch (SQLException ex) { 
+            ex.printStackTrace(); 
+            mostraMensagem(lblConfirmarRemover, "Erro ao remover. Verifique se há receitas associadas.", false); 
+        }
+    }
+
+    private void mostraMensagem(Label label, String msg, boolean sucesso) {
+        if (label == null) {
+            return;
+        }
+
+        label.setText(msg);
+
+        if(sucesso){
+            label.setStyle("-fx-text-fill: #18733b;");
+        }
+        else{
+            label.setStyle("-fx-text-fill: #E53935;");
+        }
     }
 }
 

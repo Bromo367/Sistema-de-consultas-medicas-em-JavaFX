@@ -291,7 +291,7 @@
                                     <Insets left="90.0" top="10.0" />
                                  </GridPane.margin>
                               </Button>
-                              <Label fx:id="lblConfirmarCadastro1" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                              <Label fx:id="lblConfirmarAtualizar" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                  <font>
                                     <Font size="15.0" />
                                  </font>
@@ -358,7 +358,7 @@
                                     <Insets left="90.0" top="10.0" />
                                  </GridPane.margin>
                               </Button>
-                              <Label fx:id="lblConfirmarCadastro11" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                              <Label fx:id="lblConfirmarRemover" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                  <font>
                                     <Font size="15.0" />
                                  </font>
