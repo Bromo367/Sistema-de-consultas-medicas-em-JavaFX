@@ -7,7 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
 public class ReceitaController {
-
+    
     @FXML
     private void btnInicioOnAction(ActionEvent event) {
         try {

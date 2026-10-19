@@ -19,7 +19,7 @@ public class ConsultaDAO implements IConsulta{
             stmt.setString(1, consulta.getCpfPaciente());
             stmt.setString(2, consulta.getCrmMedico());
             stmt.setString(3, consulta.getData());
-            stmt.executeQuery();
+            stmt.executeUpdate();
         }
     }
 

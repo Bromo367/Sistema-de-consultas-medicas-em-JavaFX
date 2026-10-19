@@ -23,7 +23,7 @@ public class ReceitaDAO implements IReceita{
             stmt.setDouble(5, receita.getDose());
             stmt.setString(6, receita.getUnidadeMedida());
             stmt.setString(7, receita.getIntervalo());
-            stmt.executeQuery();
+            stmt.executeUpdate();
         }
     }
 

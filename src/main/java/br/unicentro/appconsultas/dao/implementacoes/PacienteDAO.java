@@ -22,7 +22,7 @@ public class PacienteDAO implements IPaciente{
             stmt.setDouble(4, paciente.getPeso());
             stmt.setDouble(5, paciente.getAltura());
             stmt.setString(6, paciente.getTelefone());
-            stmt.executeQuery();
+            stmt.executeUpdate();
         }
     }
 

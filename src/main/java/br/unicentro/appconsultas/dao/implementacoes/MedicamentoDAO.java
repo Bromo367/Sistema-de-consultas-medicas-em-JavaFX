@@ -13,7 +13,7 @@ import br.unicentro.appconsultas.model.Medicamento;
 public class MedicamentoDAO implements IMedicamento{
     @Override
     public void insere(Medicamento medicamento) throws SQLException {
-        String sql = "INSERT INTO medico (nome) VALUES (?) RETURNING medicamentoId";
+        String sql = "INSERT INTO medicamento (nome) VALUES (?) RETURNING medicamentoId";
         try (Connection con = Conexao.getConexao();
             PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setString(1, medicamento.getNome());
