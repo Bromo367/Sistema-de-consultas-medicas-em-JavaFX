@@ -90,11 +90,11 @@ public class InicioController {
     }
 
     @FXML
-    private void btnNovaReceitaOnAction(ActionEvent event) {
+    private void btnApagarTudoOnAction(ActionEvent event) {
         try {
-            GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Receita.fxml","Receitas");
-        } catch (IOException e) {
-            e.printStackTrace();
+            bancoDAO.apagarTudo();
+        } catch (SQLException ex) { 
+            ex.printStackTrace(); 
         }
     }
 }

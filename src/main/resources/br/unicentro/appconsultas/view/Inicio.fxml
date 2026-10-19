@@ -107,8 +107,8 @@
               </rowConstraints>
                <children>
                   <Button fx:id="btnNovoPaciente" alignment="CENTER" mnemonicParsing="false" onAction="#btnNovoPacienteOnAction" prefHeight="80.0" prefWidth="225.0" text="Cadastrar Paciente" GridPane.halignment="CENTER" />
-                  <Button fx:id="btnNovaReceita" mnemonicParsing="false" onAction="#btnNovaReceitaOnAction" prefHeight="80.0" prefWidth="225.0" text="Emitir Receita" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                  <Button fx:id="btnNovoMedico" mnemonicParsing="false" onAction="#btnNovoMedicoOnAction" prefHeight="80.0" prefWidth="225.0" text="Cadatrar Médico" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                  <Button fx:id="btnApagarTudo" mnemonicParsing="false" onAction="#btnApagarTudoOnAction" prefHeight="80.0" prefWidth="225.0" text="Apagar Tudo" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <Button fx:id="btnNovoMedico" mnemonicParsing="false" onAction="#btnNovoMedicoOnAction" prefHeight="80.0" prefWidth="225.0" text="Cadastrar Médico" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
                   <Button fx:id="btnNovaConsulta" mnemonicParsing="false" onAction="#btnNovaConsultaOnAction" prefHeight="80.0" prefWidth="225.0" text="Agendar Consulta" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets />
