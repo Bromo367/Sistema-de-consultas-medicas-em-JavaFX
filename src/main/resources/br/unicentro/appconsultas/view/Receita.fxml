@@ -170,10 +170,10 @@
                                     <Insets left="90.0" top="10.0" />
                                  </GridPane.margin>
                               </Button>
-                              <Label fx:id="lblConfirmarEmitir" prefHeight="21.0" prefWidth="0.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
-                                 <font>
-                                    <Font size="15.0" />
-                                 </font>
+                              <Label fx:id="lblConfirmarEmitir" prefHeight="28.0" prefWidth="427.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="7">
+                                    <font>
+                                       <Font size="10.0" />
+                                    </font>
                               </Label>
                               <Label layoutX="40.0" layoutY="103.0" text="Dosagem" GridPane.rowIndex="4">
                                  <font>

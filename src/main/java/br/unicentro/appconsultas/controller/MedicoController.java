@@ -1,12 +1,28 @@
 package br.unicentro.appconsultas.controller;
+import br.unicentro.appconsultas.main.GerenciadorTelas;
+import br.unicentro.appconsultas.dao.implementacoes.MedicoDAO;
+import br.unicentro.appconsultas.model.Medico;
+
+import java.sql.SQLException;
+
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.event.ActionEvent;
 
 import java.io.IOException;
-
-import br.unicentro.appconsultas.main.GerenciadorTelas;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-
 public class MedicoController {
+
+    @FXML private TextField txtNome, txtCRM, txtEspecializacao, txtTelefone;
+    @FXML private Label lblConfirmarCadastro;
+    @FXML private TextField txtBuscarCRM;
+    @FXML private Label lblNomeBuscar, lblEspecializacaoBuscar, lblConfirmarBuscar, lblCRMBuscar, lblTelefoneBuscar;
+    @FXML private TextField txtAtualizarNome, txtAtualizarCRM, txtAtualizarEspecializacao, txtAtualizarTelefone;
+    @FXML private Label lblConfirmarAtualizar;
+    @FXML private TextField txtRemoverCRM;
+    @FXML private Label lblConfirmarRemover;
+
+    private final MedicoDAO medicoDAO = new MedicoDAO();
 
     @FXML
     private void btnInicioOnAction(ActionEvent event) {
@@ -62,24 +78,138 @@ public class MedicoController {
         }
     }
 
-    @FXML
-    private void btnCadastrarMedicoOnAction(ActionEvent event) {
-        // Implementar o cadastro depois.
+@FXML
+    private void btnCadastrarMedicoOnAction(ActionEvent e) {
+        String crm = txtCRM.getText().trim();
+        String nome = txtNome.getText().trim();
+        String esp = txtEspecializacao.getText().trim();
+        String tel = txtTelefone.getText().trim();
+
+        if (crm.isEmpty() || nome.isEmpty() || esp.isEmpty() || tel.isEmpty()) {
+            mostrarMensagem(lblConfirmarCadastro, "Preencha todos os campos.", false);
+            return;
+        }
+
+        try {
+            medicoDAO.insere(new Medico(crm, nome, esp, tel));
+            mostrarMensagem(lblConfirmarCadastro, "Médico cadastrado com sucesso!", true);
+            txtCRM.clear();
+            txtNome.clear();
+            txtEspecializacao.clear();
+            txtTelefone.clear();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            mostrarMensagem(lblConfirmarCadastro, "Erro ao cadastrar. Confira o CRM e a conexão com o banco.", false);
+        }
     }
 
     @FXML
-    private void btnBuscarMedicoOnAction(ActionEvent event) {
-        // Implementar a busca depois.
+    private void btnBuscarMedicoOnAction(ActionEvent e) {
+        String crm = txtBuscarCRM.getText().trim();
+        
+        if (crm.isEmpty()) {
+            mostrarMensagem(lblConfirmarBuscar, "Digite o CRM para buscar.", false);
+            limparBusca();
+            return;
+        }
+
+        try {
+            Medico m = medicoDAO.buscaPorCodigo(crm);
+            
+            if (m == null) {
+                mostrarMensagem(lblConfirmarBuscar, "Nenhum médico encontrado com esse CRM.", false);
+                limparBusca();
+                return;
+            }
+
+            lblCRMBuscar.setText("CRM: " + m.getCrmMedico());
+            lblNomeBuscar.setText("Nome: " + m.getNome());
+            lblEspecializacaoBuscar.setText("Especialização: " + m.getEspecializacao());
+            lblTelefoneBuscar.setText("Telefone: " + m.getTelefone());
+            mostrarMensagem(lblConfirmarBuscar, "Médico encontrado.", true);
+            
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            mostrarMensagem(lblConfirmarBuscar, "Erro ao consultar o banco de dados.", false);
+            limparBusca();
+        }
     }
 
     @FXML
-    private void btnAtualizarMedicoOnAction(ActionEvent event) {
-        // Implementar a atualização depois.
+    private void btnAtualizarMedicoOnAction(ActionEvent e) {
+        String crm = txtAtualizarCRM.getText().trim();
+        String nome = txtAtualizarNome.getText().trim();
+        String esp = txtAtualizarEspecializacao.getText().trim();
+        String tel = txtAtualizarTelefone.getText().trim();
+
+        if (crm.isEmpty() || nome.isEmpty() || esp.isEmpty() || tel.isEmpty()) {
+            mostrarMensagem(lblConfirmarAtualizar, "Preencha todos os campos.", false);
+            return;
+        }
+
+        try {
+            if (medicoDAO.buscaPorCodigo(crm) == null) {
+                mostrarMensagem(lblConfirmarAtualizar, "Não existe médico cadastrado com esse CRM.", false);
+                return;
+            }
+            
+            medicoDAO.atualiza(new Medico(crm, nome, esp, tel));
+            mostrarMensagem(lblConfirmarAtualizar, "Médico atualizado com sucesso!", true);
+            
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            mostrarMensagem(lblConfirmarAtualizar, "Erro ao atualizar. Confira a conexão com o banco.", false);
+        }
     }
 
     @FXML
-    private void btnRemoverMedicoOnAction(ActionEvent event) {
-        // Implementar a remoção depois.
+    private void btnRemoverMedicoOnAction(ActionEvent e) {
+        String crm = txtRemoverCRM.getText().trim();
+        
+        if (crm.isEmpty()) {
+            mostrarMensagem(lblConfirmarRemover, "Digite o CRM do médico.", false);
+            return;
+        }
+
+        try {
+            Medico m = medicoDAO.buscaPorCodigo(crm);
+            
+            if (m == null) {
+                mostrarMensagem(lblConfirmarRemover, "Não existe médico cadastrado com esse CRM.", false);
+                return;
+            }
+            
+            medicoDAO.remove(m);
+            mostrarMensagem(lblConfirmarRemover, "Médico removido com sucesso!", true);
+            txtRemoverCRM.clear();
+            
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            mostrarMensagem(lblConfirmarRemover, "Erro ao remover. Verifique se existem consultas associadas.", false);
+        }
     }
+
+    private void mostrarMensagem(Label label, String msg, boolean sucesso) {
+        if (label == null) {
+            return;
+        }
+
+        label.setText(msg);
+
+        if(sucesso){
+            label.setStyle("-fx-text-fill: #18733b;");
+        }
+        else{
+            label.setStyle("-fx-text-fill: #E53935;");
+        }
+    }
+
+    private void limparBusca() {
+        lblCRMBuscar.setText("");
+        lblNomeBuscar.setText("");
+        lblEspecializacaoBuscar.setText("");
+        lblTelefoneBuscar.setText("");
+    }
+
 }
 

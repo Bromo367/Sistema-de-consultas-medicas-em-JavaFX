@@ -11,18 +11,24 @@ import br.unicentro.appconsultas.dao.interfaces.IReceita;
 import br.unicentro.appconsultas.model.Receita;
 
 public class ReceitaDAO implements IReceita{
+    
     @Override
     public void insere(Receita receita) throws SQLException {
-        String sql = "INSERT INTO receita VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO receita "
+            + "(cpfPaciente, crmMedico, data, medicamentoId, dose, unidadeMedida, intervalo) "
+            + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
         try (Connection con = Conexao.getConexao();
             PreparedStatement stmt = con.prepareStatement(sql)) {
-            stmt.setString(1, receita.getCpfPaciente());
-            stmt.setString(2, receita.getCrmMedico());
-            stmt.setString(3, receita.getData());
+
+            stmt.setString(1, receita.getCpfPaciente().trim());
+            stmt.setString(2, receita.getCrmMedico().trim());
+            stmt.setDate(3, java.sql.Date.valueOf(receita.getData()));
             stmt.setInt(4, receita.getMedicamentoId());
             stmt.setDouble(5, receita.getDose());
             stmt.setString(6, receita.getUnidadeMedida());
             stmt.setString(7, receita.getIntervalo());
+
             stmt.executeUpdate();
         }
     }

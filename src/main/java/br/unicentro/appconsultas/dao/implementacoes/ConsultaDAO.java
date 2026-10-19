@@ -18,7 +18,7 @@ public class ConsultaDAO implements IConsulta{
             PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setString(1, consulta.getCpfPaciente());
             stmt.setString(2, consulta.getCrmMedico());
-            stmt.setString(3, consulta.getData());
+            stmt.setDate(3, java.sql.Date.valueOf(consulta.getData()));
             stmt.executeUpdate();
         }
     }

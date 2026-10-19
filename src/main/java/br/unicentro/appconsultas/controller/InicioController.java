@@ -56,7 +56,7 @@ public class InicioController {
     @FXML
     private void btnMedicamentosOnAction(ActionEvent event) {
         try {
-            GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Medicamento.fxml","Pacientes");
+            GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Medicamento.fxml","Medicamento");
         } catch (IOException e) {
             e.printStackTrace();
         }
