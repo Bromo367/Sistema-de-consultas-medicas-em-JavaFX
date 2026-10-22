@@ -12,6 +12,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
+import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
+
 public class MedicamentoController {
 
     @FXML private TextField txtNome, txtMedicamentoId;
@@ -22,6 +27,9 @@ public class MedicamentoController {
     @FXML private Label lblConfirmarAtualizar;
     @FXML private TextField txtRemoverMedicamentoId;
     @FXML private Label lblConfirmarRemover;
+
+    @FXML private Label lblConfirmarListar;
+    @FXML private Pane painelLista;
 
     private final MedicamentoDAO medicamentoDAO = new MedicamentoDAO();
 
@@ -228,6 +236,45 @@ public class MedicamentoController {
         } catch (SQLException ex) { 
             ex.printStackTrace(); 
             mostraMensagem(lblConfirmarRemover, "Erro ao remover. Verifique se há receitas associadas.", false); 
+        }
+    }
+
+    @FXML
+    private void btnListarMedicamentoOnAction(ActionEvent event) {
+        try{
+
+            TableView<Medicamento> tabela = new TableView<>();
+            
+            TableColumn<Medicamento, Integer> colunaMedicamentoId = new TableColumn("Identificador");
+            colunaMedicamentoId.setCellValueFactory(new  PropertyValueFactory<>("medicamentoId"));
+    
+            TableColumn<Medicamento, String> colunaNome = new TableColumn("Nome");
+            colunaNome.setCellValueFactory(new  PropertyValueFactory<>("nome"));
+
+            colunaMedicamentoId.setPrefWidth(160);
+            colunaNome.setPrefWidth(160);
+
+
+            tabela.getColumns().addAll(colunaMedicamentoId, colunaNome);
+
+            tabela.getItems().setAll(medicamentoDAO.listaTodos());
+
+            tabela.setColumnResizePolicy(
+                TableView.CONSTRAINED_RESIZE_POLICY
+            );
+
+            tabela.setPrefHeight(28 + (tabela.getItems().size() * 24) + 5);
+            tabela.setMinHeight(28 + (tabela.getItems().size() * 24) + 5);
+            tabela.setMaxHeight(8 + (tabela.getItems().size() * 24) + 5);
+
+            painelLista.getChildren().clear();
+            painelLista.getChildren().add(tabela);
+
+            mostraMensagem(lblConfirmarListar, "Listagem realizada.", true);
+        }
+         catch (SQLException e) {
+            e.printStackTrace();
+            mostraMensagem(lblConfirmarListar, "Erro ao Listar.", false);
         }
     }
 

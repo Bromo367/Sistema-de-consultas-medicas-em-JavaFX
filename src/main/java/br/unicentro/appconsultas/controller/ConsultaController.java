@@ -13,10 +13,16 @@ import br.unicentro.appconsultas.model.Consulta;
 import br.unicentro.appconsultas.dao.implementacoes.PacienteDAO;
 import br.unicentro.appconsultas.dao.implementacoes.MedicoDAO;
 
+
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
 
 public class ConsultaController {
 
@@ -28,6 +34,9 @@ public class ConsultaController {
     @FXML private Label lblConfirmarAtualizar;
     @FXML private TextField txtRemoverCPFPaciente, txtRemoverCRMMedico, txtRemoverData;
     @FXML private Label lblConfirmarRemover;
+
+    @FXML private Label lblConfirmarListar;
+    @FXML private Pane painelLista;
 
     private final ConsultaDAO consultaDAO = new ConsultaDAO();
     private final PacienteDAO pacienteDAO = new PacienteDAO();
@@ -224,6 +233,49 @@ public class ConsultaController {
         } catch (SQLException ex) { 
             ex.printStackTrace(); 
             mostraMensagem(lblConfirmarRemover, "Erro ao remover. Verifique se há receitas associadas.", false); 
+        }
+    }
+
+    @FXML
+    private void btnListarConsultaOnAction(ActionEvent event) {
+        try{
+
+            TableView<Consulta> tabela = new TableView<>();
+            
+            TableColumn<Consulta, String> colunaCPF = new TableColumn("Paciente");
+            colunaCPF.setCellValueFactory(new  PropertyValueFactory<>("cpfPaciente"));
+    
+            TableColumn<Consulta, String> colunaCRM = new TableColumn("Médico");
+            colunaCRM.setCellValueFactory(new  PropertyValueFactory<>("crmMedico"));
+
+            TableColumn<Consulta, String> colunaData = new TableColumn("Data");
+            colunaData.setCellValueFactory(new  PropertyValueFactory<>("data"));
+
+            colunaCPF.setPrefWidth(160);
+            colunaCRM.setPrefWidth(160);
+            colunaData.setPrefWidth(160);
+
+
+            tabela.getColumns().addAll(colunaCPF, colunaCRM, colunaData);
+
+            tabela.getItems().setAll(consultaDAO.listaTodos());
+
+            tabela.setColumnResizePolicy(
+                TableView.CONSTRAINED_RESIZE_POLICY
+            );
+
+            tabela.setPrefHeight(28 + (tabela.getItems().size() * 24) + 5);
+            tabela.setMinHeight(28 + (tabela.getItems().size() * 24) + 5);
+            tabela.setMaxHeight(8 + (tabela.getItems().size() * 24) + 5);
+
+            painelLista.getChildren().clear();
+            painelLista.getChildren().add(tabela);
+
+            mostraMensagem(lblConfirmarListar, "Listagem realizada.", true);
+        }
+         catch (SQLException e) {
+            e.printStackTrace();
+            mostraMensagem(lblConfirmarListar, "Erro ao Listar.", false);
         }
     }
     

@@ -10,6 +10,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.event.ActionEvent;
 
+import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
+
 import java.io.IOException;
 public class MedicoController {
 
@@ -21,6 +26,12 @@ public class MedicoController {
     @FXML private Label lblConfirmarAtualizar;
     @FXML private TextField txtRemoverCRM;
     @FXML private Label lblConfirmarRemover;
+
+    @FXML
+    private Label lblConfirmarListar;
+
+    @FXML
+    private Pane painelLista;
 
     private final MedicoDAO medicoDAO = new MedicoDAO();
 
@@ -186,6 +197,54 @@ public class MedicoController {
         } catch (SQLException ex) {
             ex.printStackTrace();
             mostrarMensagem(lblConfirmarRemover, "Erro ao remover. Verifique se existem consultas associadas.", false);
+        }
+    }
+
+    @FXML
+    private void btnListarMedicoOnAction(ActionEvent event) {
+        try{
+
+            TableView<Medico> tabela = new TableView<>();
+            
+            TableColumn<Medico, String> colunaCRM = new TableColumn("CRM");
+            colunaCRM.setCellValueFactory(new  PropertyValueFactory<>("crmMedico"));
+    
+            TableColumn<Medico, String> colunaNome = new TableColumn("Nome");
+            colunaNome.setCellValueFactory(new  PropertyValueFactory<>("nome"));
+
+            TableColumn<Medico, Integer> colunaEspecializacao = new TableColumn("Especializacao");
+            colunaEspecializacao.setCellValueFactory(new  PropertyValueFactory<>("especializacao"));
+    
+            TableColumn<Medico, Double> colunaTelefone = new TableColumn("Telefone");
+            colunaTelefone.setCellValueFactory(new  PropertyValueFactory<>("telefone"));
+
+    
+            colunaCRM.setPrefWidth(160);
+            colunaNome.setPrefWidth(160);
+            colunaEspecializacao.setPrefWidth(160);
+            colunaTelefone.setPrefWidth(160);
+            
+
+            tabela.getColumns().addAll(colunaCRM, colunaNome, colunaEspecializacao, colunaTelefone);
+
+            tabela.getItems().setAll(medicoDAO.listaTodos());
+
+            tabela.setColumnResizePolicy(
+                TableView.CONSTRAINED_RESIZE_POLICY
+            );
+
+            tabela.setPrefHeight(28 + (tabela.getItems().size() * 24) + 5);
+            tabela.setMinHeight(28 + (tabela.getItems().size() * 24) + 5);
+            tabela.setMaxHeight(8 + (tabela.getItems().size() * 24) + 5);
+
+            painelLista.getChildren().clear();
+            painelLista.getChildren().add(tabela);
+
+            mostrarMensagem(lblConfirmarListar, "Listagem Realizada.", true);
+        }
+         catch (SQLException e) {
+            e.printStackTrace();
+            mostrarMensagem(lblConfirmarListar, "Erro ao Listar.", false);
         }
     }
 

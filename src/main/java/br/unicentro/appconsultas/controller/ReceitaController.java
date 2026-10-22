@@ -10,6 +10,11 @@ import br.unicentro.appconsultas.main.GerenciadorTelas;
 import br.unicentro.appconsultas.dao.implementacoes.ReceitaDAO;
 import br.unicentro.appconsultas.model.Receita;
 
+import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -24,6 +29,12 @@ public class ReceitaController {
     @FXML private Label lblConfirmarAtualizar;
     @FXML private TextField txtRemoverMedicamentoId, txtRemoverCPF, txtRemoverCRM, txtRemoverData;
     @FXML private Label lblConfirmarRemover;
+
+    @FXML
+    private Label lblConfirmarListar;
+
+    @FXML
+    private Pane painelLista;
 
     private final ReceitaDAO receitaDAO = new ReceitaDAO();
     
@@ -280,6 +291,54 @@ public class ReceitaController {
         } catch (SQLException ex) { 
             ex.printStackTrace(); 
             mostraMensagem(lblConfirmarRemover, "Erro ao remover receita.", false); 
+        }
+    }
+
+    @FXML
+    private void btnListarReceitaOnAction(ActionEvent event) {
+        try{
+
+            TableView<Receita> tabela = new TableView<>();
+            
+            TableColumn<Receita, String> colunaCPF = new TableColumn("Paciente");
+            colunaCPF.setCellValueFactory(new  PropertyValueFactory<>("cpfPaciente"));
+    
+            TableColumn<Receita, String> colunaCRM = new TableColumn("Médico");
+            colunaCRM.setCellValueFactory(new  PropertyValueFactory<>("crmMedico"));
+
+            TableColumn<Receita, String> colunaData = new TableColumn("Data");
+            colunaData.setCellValueFactory(new  PropertyValueFactory<>("data"));
+    
+            TableColumn<Receita, Integer> colunaMedicamento = new TableColumn("Medicamento");
+            colunaMedicamento.setCellValueFactory(new  PropertyValueFactory<>("medicamentoId"));
+
+    
+            colunaCRM.setPrefWidth(160);
+            colunaCPF.setPrefWidth(160);
+            colunaData.setPrefWidth(160);
+            colunaMedicamento.setPrefWidth(160);
+            
+
+            tabela.getColumns().addAll(colunaCRM, colunaCPF, colunaData, colunaMedicamento);
+
+            tabela.getItems().setAll(receitaDAO.listaTodos());
+
+            tabela.setColumnResizePolicy(
+                TableView.CONSTRAINED_RESIZE_POLICY
+            );
+
+            tabela.setPrefHeight(28 + (tabela.getItems().size() * 24) + 5);
+            tabela.setMinHeight(28 + (tabela.getItems().size() * 24) + 5);
+            tabela.setMaxHeight(8 + (tabela.getItems().size() * 24) + 5);
+
+            painelLista.getChildren().clear();
+            painelLista.getChildren().add(tabela);
+
+            mostraMensagem(lblConfirmarListar, "Listagem realizada.", true);
+        }
+         catch (SQLException e) {
+            e.printStackTrace();
+            mostraMensagem(lblConfirmarListar, "Erro ao Listar.", false);
         }
     }
 

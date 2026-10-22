@@ -448,7 +448,7 @@
                                     <Insets left="90.0" top="10.0" />
                                  </GridPane.margin>
                               </Button>
-                              <Label fx:id="lblConfirmarListar" prefHeight="21.0" prefWidth="0.0" GridPane.columnIndex="1">
+                              <Label fx:id="lblConfirmarListar" prefHeight="21.0" prefWidth="200.0" GridPane.columnIndex="1">
                                  <font>
                                     <Font size="15.0" />
                                  </font>
