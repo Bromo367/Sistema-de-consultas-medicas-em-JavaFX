@@ -140,7 +140,7 @@ public class ConsultaController {
     } catch (DateTimeParseException ex) {
         mostraMensagem(
             lblConfirmarCadastro,
-            "Data inválida. Use o formato DD/MM/AAAA.",
+            "Data inválida. Use o formato AAAA/MM/DD.",
             false
         );
     } catch (SQLException ex) {

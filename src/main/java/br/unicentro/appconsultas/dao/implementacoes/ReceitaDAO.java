@@ -40,7 +40,7 @@ public class ReceitaDAO implements IReceita{
             PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setString(1, receita.getCpfPaciente());
             stmt.setString(2, receita.getCrmMedico());
-            stmt.setString(3, receita.getData());
+            stmt.setDate(3, java.sql.Date.valueOf(receita.getData()));
             stmt.setInt(4, receita.getMedicamentoId());
             stmt.executeUpdate();
         }
@@ -56,7 +56,7 @@ public class ReceitaDAO implements IReceita{
             stmt.setString(3, receita.getIntervalo());
             stmt.setString(4, receita.getCpfPaciente());
             stmt.setString(5, receita.getCrmMedico());
-            stmt.setString(6, receita.getData());
+            stmt.setDate(6, java.sql.Date.valueOf(receita.getData()));
             stmt.setInt(7, receita.getMedicamentoId());
             stmt.executeUpdate();
         }
@@ -65,7 +65,7 @@ public class ReceitaDAO implements IReceita{
     @Override
     public List<Receita> busca(String cpfPaciente, String crmMedico, String data, int medicamentoId) throws SQLException {
         String sql = "SELECT * FROM receita WHERE ";
-        List<String> strsBusca = new ArrayList<>();
+        List<Object> strsBusca = new ArrayList<>();
         if(cpfPaciente == null && crmMedico == null && data == null && medicamentoId < 0){
             return listaTodos();
         }
@@ -79,7 +79,7 @@ public class ReceitaDAO implements IReceita{
         }
         if(data!=null){
             sql=sql+"data = ? AND ";
-            strsBusca.add(data);
+            strsBusca.add(java.sql.Date.valueOf(data));
         }
         if(medicamentoId>=0){
             sql=sql+"medicamentoId = ? AND ";
@@ -89,8 +89,12 @@ public class ReceitaDAO implements IReceita{
         try (Connection con = Conexao.getConexao();
             PreparedStatement stmt = con.prepareStatement(sql)){
             int i=1;
-            for(String str:strsBusca){
-                stmt.setString(i,str);
+            for(Object parametro:strsBusca){
+                if(parametro instanceof java.sql.Date){
+                    stmt.setDate(i, (java.sql.Date) parametro);
+                } else {
+                    stmt.setString(i, (String) parametro);
+                }
                 i++;
             }
             if(medicamentoId>=0){

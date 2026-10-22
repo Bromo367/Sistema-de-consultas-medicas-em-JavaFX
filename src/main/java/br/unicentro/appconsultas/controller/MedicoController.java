@@ -212,10 +212,10 @@ public class MedicoController {
             TableColumn<Medico, String> colunaNome = new TableColumn("Nome");
             colunaNome.setCellValueFactory(new  PropertyValueFactory<>("nome"));
 
-            TableColumn<Medico, Integer> colunaEspecializacao = new TableColumn("Especializacao");
+            TableColumn<Medico, String> colunaEspecializacao = new TableColumn("Especializacao");
             colunaEspecializacao.setCellValueFactory(new  PropertyValueFactory<>("especializacao"));
     
-            TableColumn<Medico, Double> colunaTelefone = new TableColumn("Telefone");
+            TableColumn<Medico, String> colunaTelefone = new TableColumn("Telefone");
             colunaTelefone.setCellValueFactory(new  PropertyValueFactory<>("telefone"));
 
     
