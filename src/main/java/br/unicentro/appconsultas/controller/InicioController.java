@@ -1,12 +1,16 @@
 package br.unicentro.appconsultas.controller;
+import br.unicentro.appconsultas.dao.implementacoes.BancoDAO;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import br.unicentro.appconsultas.main.GerenciadorTelas;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
 public class InicioController {
+
+    private final BancoDAO bancoDAO = new BancoDAO();
 
     @FXML
     private void btnInicioOnAction(ActionEvent event) {

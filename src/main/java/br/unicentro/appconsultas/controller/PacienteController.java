@@ -1,16 +1,21 @@
 package br.unicentro.appconsultas.controller;
+
 import br.unicentro.appconsultas.main.GerenciadorTelas;
 import br.unicentro.appconsultas.dao.implementacoes.PacienteDAO;
 import br.unicentro.appconsultas.model.Paciente;
 
 import java.sql.SQLException;
+import java.io.IOException;
+import java.util.List;
 
 import javafx.fxml.FXML;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.event.ActionEvent;
-
-import java.io.IOException;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
 
 public class PacienteController {
 
@@ -45,6 +50,9 @@ public class PacienteController {
     // Remover
     @FXML private TextField txtRemoverCPF;
     @FXML private Label lblConfirmarRemover;
+
+    @FXML private Label lblConfirmarListar;
+    @FXML private Pane painelLista;
 
     private final PacienteDAO pacienteDAO = new PacienteDAO();
 
@@ -168,7 +176,7 @@ public class PacienteController {
             lblTelefoneBuscar.setText("Telefone: " + paciente.getTelefone());
             
             mostrarMensagem(lblConfirmarBuscar, "Paciente encontrado.", true);
-            limparResultadoBusca();
+
             
         } catch (SQLException e) {
             e.printStackTrace();
@@ -251,6 +259,58 @@ public class PacienteController {
                     "Erro ao remover. Verifique se o paciente possui consultas ou receitas associadas.", false);
         }
     }
+
+    @FXML
+    private void btnListarPacienteOnAction(ActionEvent event) {
+        try{
+
+            TableView<Paciente> tabela = new TableView<>();
+            
+            TableColumn<Paciente, String> colunaCPF = new TableColumn("CPF");
+            colunaCPF.setCellValueFactory(new  PropertyValueFactory<>("cpfPaciente"));
+    
+            TableColumn<Paciente, String> colunaNome = new TableColumn("Nome");
+            colunaNome.setCellValueFactory(new  PropertyValueFactory<>("nome"));
+
+            TableColumn<Paciente, Integer> colunaIdade = new TableColumn("Idade");
+            colunaIdade.setCellValueFactory(new  PropertyValueFactory<>("idade"));
+    
+            TableColumn<Paciente, Double> colunaPeso = new TableColumn("Peso");
+            colunaPeso.setCellValueFactory(new  PropertyValueFactory<>("peso"));
+
+            TableColumn<Paciente, Double> colunaAltura = new TableColumn("Altura");
+            colunaAltura.setCellValueFactory(new  PropertyValueFactory<>("altura"));
+    
+            colunaCPF.setPrefWidth(160);
+            colunaNome.setPrefWidth(160);
+            colunaIdade.setPrefWidth(160);
+            colunaPeso.setPrefWidth(160);
+            colunaAltura.setPrefWidth(160);
+
+
+            tabela.getColumns().addAll(colunaCPF, colunaNome, colunaIdade, colunaPeso, colunaAltura);
+
+            tabela.getItems().setAll(pacienteDAO.listaTodos());
+
+            tabela.setColumnResizePolicy(
+                TableView.CONSTRAINED_RESIZE_POLICY
+            );
+
+            tabela.setPrefHeight(28 + (tabela.getItems().size() * 24) + 5);
+            tabela.setMinHeight(28 + (tabela.getItems().size() * 24) + 5);
+            tabela.setMaxHeight(8 + (tabela.getItems().size() * 24) + 5);
+
+            painelLista.getChildren().clear();
+            painelLista.getChildren().add(tabela);
+
+            mostrarMensagem(lblConfirmarListar, "Listagem realizada.", true);
+        }
+         catch (SQLException e) {
+            e.printStackTrace();
+            mostrarMensagem(lblConfirmarListar, "Erro ao Listar.", false);
+        }
+    }
+
 
     private void mostrarMensagem(Label label, String msg, boolean sucesso) {
         if (label == null) {
