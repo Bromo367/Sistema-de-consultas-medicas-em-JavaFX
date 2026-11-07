@@ -47,7 +47,16 @@ public class MedicoService {
     }
 
     public void remover(String crm) throws ServiceException{
-
+        try{
+            Medico medico = medicoDAO.buscaPorCodigo(crm);
+            if(medico == null){
+                throw (new ServiceException("Nenhum médico encontrado com esse CRM."));
+            }
+            medicoDAO.remove(medico);
+        }
+        catch(SQLException ex){
+            throw(new ServiceException("Erro na conexão com o banco de dados"));
+        }
     }
 
     public List<Medico> listarTodos() throws ServiceException{

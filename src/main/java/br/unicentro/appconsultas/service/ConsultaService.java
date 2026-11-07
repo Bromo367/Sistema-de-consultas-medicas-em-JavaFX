@@ -26,14 +26,32 @@ public class ConsultaService {
             throw(new ServiceException("Erro na conexão com o banco de dados"));
         }
     }
-    public Consulta buscar(String cpfPaciente, String crmMedico, String data) throws ServiceException{
-        return null;
-    }
-    public void atualizar(Consulta consulta) throws ServiceException{
+    public List<Consulta> buscar(String cpfPaciente, String crmMedico, String data) throws ServiceException{
+        try{
+            List<Consulta> lista = consultaDAO.busca(cpfPaciente, crmMedico, data);
+                
+            if (lista.isEmpty()) { 
+                throw (new ServiceException("Nenhuma consulta encontrada."));
+            }
 
+            return lista;
+        }
+        catch(SQLException ex){
+            throw(new ServiceException("Erro na conexão com o banco de dados"));
+        }
     }
     public void remover(String cpfPaciente, String crmMedico, String data) throws ServiceException{
-
+        try{
+            List<Consulta> lista = consultaDAO.busca(cpfPaciente, crmMedico, data);
+                
+            if (lista.isEmpty()) { 
+                throw (new ServiceException("Nenhuma consulta encontrada."));
+            }
+            consultaDAO.remove(lista.get(0));
+        }
+        catch(SQLException ex){
+            throw(new ServiceException("Erro na conexão com o banco de dados"));
+        }
     }
     public List<Consulta> listarTodos() throws ServiceException{
         try{
