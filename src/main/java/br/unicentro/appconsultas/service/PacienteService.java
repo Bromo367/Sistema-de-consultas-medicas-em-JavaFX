@@ -1,0 +1,72 @@
+package br.unicentro.appconsultas.service;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import br.unicentro.appconsultas.model.Paciente;
+import br.unicentro.appconsultas.dao.implementacoes.PacienteDAO;
+
+
+public class PacienteService {
+    private final PacienteDAO pacienteDAO = new PacienteDAO();
+    public void cadastrar(Paciente paciente) throws ServiceException{
+        if (paciente.getIdade() <= 0 || paciente.getPeso() <= 0 || paciente.getAltura() <= 0) {
+            throw (new ServiceException("Insira valores válidos."));
+        }
+
+        try{
+            pacienteDAO.insere(paciente);
+        }
+        catch(SQLException ex){
+            throw(new ServiceException("Erro na conexão com o banco de dados"));
+        }
+    }
+    public Paciente buscar(String cpf) throws ServiceException{
+        try{
+            Paciente paciente = pacienteDAO.buscaPorCodigo(cpf);
+            
+            if (paciente == null) {
+                throw (new ServiceException("Nenhum paciente encontrado com esse CPF."));
+            }
+            return paciente;
+        }
+        catch(SQLException ex){
+            throw(new ServiceException("Erro na conexão com o banco de dados"));
+        }
+    }
+    public void atualizar(Paciente paciente) throws ServiceException{
+        if (paciente.getIdade() <= 0 || paciente.getPeso() <= 0 || paciente.getAltura() <= 0) {
+            throw (new ServiceException("Insira valores válidos."));
+        }
+
+        try{
+            if (pacienteDAO.buscaPorCodigo(paciente.getCpfPaciente()) == null) {
+                throw (new ServiceException("Não existe paciente cadastrado com esse CPF."));
+            }
+            pacienteDAO.atualiza(paciente);
+        }
+        catch(SQLException ex){
+            throw(new ServiceException("Erro na conexão com o banco de dados"));
+        }
+    }
+    public void remover(String cpf) throws ServiceException{
+        try{
+            Paciente paciente = pacienteDAO.buscaPorCodigo(cpf);
+            if (paciente == null) {
+                throw (new ServiceException("Não existe paciente cadastrado com esse CPF."));
+            }
+            pacienteDAO.remove(paciente);
+        }
+        catch(SQLException ex){
+            throw(new ServiceException("Erro na conexão com o banco de dados"));
+        }
+    }
+    public List<Paciente> listarTodos() throws ServiceException{
+        try{
+            return pacienteDAO.listaTodos();
+        }
+        catch(SQLException ex){
+            throw(new ServiceException("Erro na conexão com o banco de dados"));
+        }
+    }
+}

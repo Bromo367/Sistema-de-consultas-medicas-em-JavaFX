@@ -3,10 +3,11 @@ package br.unicentro.appconsultas.controller;
 import br.unicentro.appconsultas.main.GerenciadorTelas;
 import br.unicentro.appconsultas.dao.implementacoes.PacienteDAO;
 import br.unicentro.appconsultas.model.Paciente;
+import br.unicentro.appconsultas.service.PacienteService;
+import br.unicentro.appconsultas.service.ServiceException;
 
 import java.sql.SQLException;
 import java.io.IOException;
-import java.util.List;
 
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
@@ -55,6 +56,8 @@ public class PacienteController {
     @FXML private Pane painelLista;
 
     private final PacienteDAO pacienteDAO = new PacienteDAO();
+
+    private final PacienteService pacienteService = new PacienteService();
 
     
     @FXML
@@ -130,23 +133,16 @@ public class PacienteController {
             double peso = Double.parseDouble(pesoTexto);
             double altura = Double.parseDouble(alturaTexto);
 
-            if (idade <= 0 || peso <= 0 || altura <= 0) {
-                mostrarMensagem(lblConfirmarCadastro, "Insira valores válidos.", false);
-                return;
-            }
-
             Paciente paciente = new Paciente(cpf, nome, idade, peso, altura, telefone);
-            pacienteDAO.insere(paciente);
+            pacienteService.cadastrar(paciente);
             mostrarMensagem(lblConfirmarCadastro, "Paciente cadastrado com sucesso!", true);
             limparCadastro();
 
         } catch (NumberFormatException e) {
-            mostrarMensagem(lblConfirmarCadastro,
-                    "Verifique os valores.", false);
-        } catch (SQLException e) {
+            mostrarMensagem(lblConfirmarCadastro, "Verifique o tipo dos valores.", false);
+        } catch (ServiceException e) {
             e.printStackTrace();
-            mostrarMensagem(lblConfirmarCadastro,
-                    "Erro ao cadastrar. Confira o CPF e a conexão com o banco.", false);
+            mostrarMensagem(lblConfirmarCadastro, e.getMessage(), false);
         }
     }
 
@@ -160,13 +156,7 @@ public class PacienteController {
             return;
         }
         try {
-            Paciente paciente = pacienteDAO.buscaPorCodigo(cpf);
-            if (paciente == null) {
-                mostrarMensagem(lblConfirmarBuscar,
-                        "Nenhum paciente encontrado com esse CPF.", false);
-                limparResultadoBusca();
-                return;
-            }
+            Paciente paciente = pacienteService.buscar(cpf);
 
             lblCPFBuscar.setText("CPF: " + paciente.getCpfPaciente());
             lblNomeBuscar.setText("Nome: " + paciente.getNome());
@@ -178,11 +168,11 @@ public class PacienteController {
             mostrarMensagem(lblConfirmarBuscar, "Paciente encontrado.", true);
 
             
-        } catch (SQLException e) {
+        } catch (ServiceException e) {
             e.printStackTrace();
             limparResultadoBusca();
             mostrarMensagem(lblConfirmarBuscar,
-                    "Erro ao consultar o banco de dados.", false);
+                    e.getMessage(), false);
         }
     }
 
@@ -207,30 +197,18 @@ public class PacienteController {
             double peso = Double.parseDouble(pesoTexto);
             double altura = Double.parseDouble(alturaTexto);
 
-            if (idade <= 0 || peso <= 0 || altura <= 0) {
-                mostrarMensagem(lblConfirmarAtualizar, "Insira valores válidos.", false);
-                return;
-            }
-
-            Paciente existente = pacienteDAO.buscaPorCodigo(cpf);
-            if (existente == null) {
-                mostrarMensagem(lblConfirmarAtualizar,
-                        "Não existe paciente cadastrado com esse CPF.", false);
-                return;
-            }
-
-            Paciente pacienteAtualizado = new Paciente(cpf, nome, idade, peso, altura, telefone);
-            pacienteDAO.atualiza(pacienteAtualizado);
+            Paciente paciente = new Paciente(cpf, nome, idade, peso, altura, telefone);
+            pacienteService.atualizar(paciente);
 
             mostrarMensagem(lblConfirmarAtualizar, "Paciente atualizado com sucesso!", true);
         
         } catch (NumberFormatException e) {
             mostrarMensagem(lblConfirmarAtualizar,
-                    "Verifique os valores.", false);
-        } catch (SQLException e) {
+                    "Verifique os tipos dos valores.", false);
+        } catch (ServiceException e) {
             e.printStackTrace();
             mostrarMensagem(lblConfirmarAtualizar,
-                    "Erro ao atualizar. Confira a conexão com o banco.", false);
+                    e.getMessage(), false);
         }
     }
 

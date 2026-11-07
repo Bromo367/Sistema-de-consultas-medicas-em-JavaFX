@@ -6,5 +6,5 @@ public interface IConst {
 
     String usuario = "postgres";
 
-    String senha = "abcd1234";
+    String senha = "postgres";
 }
