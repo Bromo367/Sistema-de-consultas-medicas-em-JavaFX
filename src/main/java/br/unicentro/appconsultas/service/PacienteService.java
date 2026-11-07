@@ -21,6 +21,7 @@ public class PacienteService {
             throw(new ServiceException("Erro na conexão com o banco de dados"));
         }
     }
+
     public Paciente buscar(String cpf) throws ServiceException{
         try{
             Paciente paciente = pacienteDAO.buscaPorCodigo(cpf);
@@ -34,6 +35,7 @@ public class PacienteService {
             throw(new ServiceException("Erro na conexão com o banco de dados"));
         }
     }
+
     public void atualizar(Paciente paciente) throws ServiceException{
         if (paciente.getIdade() <= 0 || paciente.getPeso() <= 0 || paciente.getAltura() <= 0) {
             throw (new ServiceException("Insira valores válidos."));
@@ -49,6 +51,7 @@ public class PacienteService {
             throw(new ServiceException("Erro na conexão com o banco de dados"));
         }
     }
+
     public void remover(String cpf) throws ServiceException{
         try{
             Paciente paciente = pacienteDAO.buscaPorCodigo(cpf);
@@ -58,9 +61,10 @@ public class PacienteService {
             pacienteDAO.remove(paciente);
         }
         catch(SQLException ex){
-            throw(new ServiceException("Erro na conexão com o banco de dados"));
+            throw(new ServiceException("Erro ao remover. Verifique se o paciente possui consultas ou receitas associadas."));
         }
     }
+    
     public List<Paciente> listarTodos() throws ServiceException{
         try{
             return pacienteDAO.listaTodos();

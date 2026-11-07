@@ -11,9 +11,8 @@ import br.unicentro.appconsultas.dao.implementacoes.ConsultaDAO;
 import br.unicentro.appconsultas.model.Consulta;
 import br.unicentro.appconsultas.dao.implementacoes.PacienteDAO;
 import br.unicentro.appconsultas.dao.implementacoes.MedicoDAO;
-
-
-
+import br.unicentro.appconsultas.service.ConsultaService;
+import br.unicentro.appconsultas.service.ServiceException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -40,6 +39,8 @@ public class ConsultaController {
     private final ConsultaDAO consultaDAO = new ConsultaDAO();
     private final PacienteDAO pacienteDAO = new PacienteDAO();
     private final MedicoDAO medicoDAO = new MedicoDAO();
+
+    private final ConsultaService consultaService = new ConsultaService();
 
     @FXML
     private void btnInicioOnAction(ActionEvent event) {
@@ -111,23 +112,8 @@ public class ConsultaController {
     }
     try {
         validarData(data);
-        if (pacienteDAO.buscaPorCodigo(cpf) == null) {
-            mostraMensagem(
-                lblConfirmarCadastro,
-                "Paciente não cadastrado. Verifique o CPF.",
-                false
-            );
-            return;
-        }
-        if (medicoDAO.buscaPorCodigo(crm) == null) {
-            mostraMensagem(
-                lblConfirmarCadastro,
-                "Médico não cadastrado. Verifique o CRM.",
-                false
-            );
-            return;
-        }
-        consultaDAO.insere(new Consulta(cpf, crm, data));
+        Consulta consulta = new Consulta(cpf, crm, data);
+        consultaService.cadastrar(consulta);
         mostraMensagem(
             lblConfirmarCadastro,
             "Consulta cadastrada com sucesso!",
@@ -142,11 +128,11 @@ public class ConsultaController {
             "Data inválida. Use o formato AAAA/MM/DD.",
             false
         );
-    } catch (SQLException ex) {
+    } catch (ServiceException ex) {
         ex.printStackTrace();
         mostraMensagem(
             lblConfirmarCadastro,
-            "Erro ao acessar o banco ou cadastrar a consulta.",
+            ex.getMessage(),
             false
         );
     }

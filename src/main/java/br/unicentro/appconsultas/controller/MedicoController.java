@@ -1,6 +1,9 @@
 package br.unicentro.appconsultas.controller;
+
 import br.unicentro.appconsultas.main.GerenciadorTelas;
 import br.unicentro.appconsultas.dao.implementacoes.MedicoDAO;
+import br.unicentro.appconsultas.service.MedicoService;
+import br.unicentro.appconsultas.service.ServiceException;
 import br.unicentro.appconsultas.model.Medico;
 
 import java.sql.SQLException;
@@ -34,6 +37,8 @@ public class MedicoController {
     private Pane painelLista;
 
     private final MedicoDAO medicoDAO = new MedicoDAO();
+
+    private final MedicoService medicoService = new MedicoService();
 
     @FXML
     private void btnInicioOnAction(ActionEvent event) {
@@ -102,15 +107,16 @@ public class MedicoController {
         }
 
         try {
-            medicoDAO.insere(new Medico(crm, nome, esp, tel));
+            Medico medico = new Medico(crm, nome, esp, tel);
+            medicoService.cadastrar(medico);
             mostrarMensagem(lblConfirmarCadastro, "Médico cadastrado com sucesso!", true);
             txtCRM.clear();
             txtNome.clear();
             txtEspecializacao.clear();
             txtTelefone.clear();
-        } catch (SQLException ex) {
+        } catch (ServiceException ex) {
             ex.printStackTrace();
-            mostrarMensagem(lblConfirmarCadastro, "Erro ao cadastrar. Confira o CRM e a conexão com o banco.", false);
+            mostrarMensagem(lblConfirmarCadastro, ex.getMessage(), false);
         }
     }
 

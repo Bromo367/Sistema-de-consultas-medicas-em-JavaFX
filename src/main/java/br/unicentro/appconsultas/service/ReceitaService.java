@@ -14,7 +14,7 @@ public class ReceitaService {
 
     }
     public Receita buscar(String cpfPaciente, String crmMedico, String data, int medicamentoId) throws ServiceException{
-
+        return null;
     }
     public void atualizar(Receita receita) throws ServiceException{
 

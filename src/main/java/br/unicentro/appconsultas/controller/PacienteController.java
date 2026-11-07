@@ -1,12 +1,10 @@
 package br.unicentro.appconsultas.controller;
 
 import br.unicentro.appconsultas.main.GerenciadorTelas;
-import br.unicentro.appconsultas.dao.implementacoes.PacienteDAO;
 import br.unicentro.appconsultas.model.Paciente;
 import br.unicentro.appconsultas.service.PacienteService;
 import br.unicentro.appconsultas.service.ServiceException;
 
-import java.sql.SQLException;
 import java.io.IOException;
 
 import javafx.fxml.FXML;
@@ -54,8 +52,6 @@ public class PacienteController {
 
     @FXML private Label lblConfirmarListar;
     @FXML private Pane painelLista;
-
-    private final PacienteDAO pacienteDAO = new PacienteDAO();
 
     private final PacienteService pacienteService = new PacienteService();
 
@@ -221,20 +217,13 @@ public class PacienteController {
         }
 
         try {
-            Paciente paciente = pacienteDAO.buscaPorCodigo(cpf);
-            if (paciente == null) {
-                mostrarMensagem(lblConfirmarRemover,
-                        "Não existe paciente cadastrado com esse CPF.", false);
-                return;
-            }
-
-            pacienteDAO.remove(paciente);
+            pacienteService.remover(cpf);
             mostrarMensagem(lblConfirmarRemover, "Paciente removido com sucesso!", true);
             txtRemoverCPF.clear();
-        } catch (SQLException e) {
+        } catch (ServiceException e) {
             e.printStackTrace();
             mostrarMensagem(lblConfirmarRemover,
-                    "Erro ao remover. Verifique se o paciente possui consultas ou receitas associadas.", false);
+                    e.getMessage(), false);
         }
     }
 
@@ -268,7 +257,7 @@ public class PacienteController {
 
             tabela.getColumns().addAll(colunaCPF, colunaNome, colunaIdade, colunaPeso, colunaAltura);
 
-            tabela.getItems().setAll(pacienteDAO.listaTodos());
+            tabela.getItems().setAll(pacienteService.listarTodos());
 
             tabela.setColumnResizePolicy(
                 TableView.CONSTRAINED_RESIZE_POLICY
@@ -283,9 +272,9 @@ public class PacienteController {
 
             mostrarMensagem(lblConfirmarListar, "Listagem realizada.", true);
         }
-         catch (SQLException e) {
+         catch (ServiceException e) {
             e.printStackTrace();
-            mostrarMensagem(lblConfirmarListar, "Erro ao Listar.", false);
+            mostrarMensagem(lblConfirmarListar, e.getMessage(), false);
         }
     }
 
