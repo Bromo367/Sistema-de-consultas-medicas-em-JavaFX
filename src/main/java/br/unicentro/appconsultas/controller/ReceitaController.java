@@ -9,7 +9,8 @@ import java.util.List;
 import br.unicentro.appconsultas.main.GerenciadorTelas;
 import br.unicentro.appconsultas.dao.implementacoes.ReceitaDAO;
 import br.unicentro.appconsultas.model.Receita;
-
+import br.unicentro.appconsultas.service.ReceitaService;
+import br.unicentro.appconsultas.service.ServiceException;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -37,6 +38,8 @@ public class ReceitaController {
     private Pane painelLista;
 
     private final ReceitaDAO receitaDAO = new ReceitaDAO();
+
+    private final ReceitaService receitaService = new ReceitaService();
     
     @FXML
     private void btnInicioOnAction(ActionEvent event) {
@@ -120,20 +123,13 @@ public class ReceitaController {
             int id = Integer.parseInt(idT);
             double dose = Double.parseDouble(doseT.replace(',', '.'));
 
-            if (id <= 0 || dose <= 0) {
-                mostraMensagem(
-                    lblConfirmarEmitir,
-                    "Código do medicamento e dose devem ser positivos.",
-                    false
-                );
-                return;
-            }
+            
 
             Receita receita = new Receita(
                 cpf, crm, data, id, dose, unidade, intervalo
             );
 
-            receitaDAO.insere(receita);
+            receitaService.cadastrar(receita);
 
             mostraMensagem(
                 lblConfirmarEmitir,
@@ -161,12 +157,12 @@ public class ReceitaController {
                 "Código do medicamento ou dose inválidos.",
                 false
             );
-        } catch (SQLException ex) {
+        } catch (ServiceException ex) {
             ex.printStackTrace();
 
             mostraMensagem(
                 lblConfirmarEmitir,
-                "Não foi possível cadastrar a receita. Verifique os dados informados.",
+                ex.getMessage(),
                 false
             );
         }
@@ -189,18 +185,12 @@ public class ReceitaController {
             if (!data.isEmpty()) {
                 LocalDate.parse(data);
             }
-            int id = idT.isEmpty() ? -1 : Integer.parseInt(idT); 
-            List<Receita> lista = receitaDAO.busca(
+            List<Receita> lista = receitaService.buscar(
                 cpf.isEmpty() ? null : cpf, 
                 crm.isEmpty() ? null : crm, 
                 data.isEmpty() ? null : data, 
-                id
+                idT.isEmpty() ? -1 : Integer.parseInt(idT)
             );
-            if (lista.isEmpty()) { 
-                mostraMensagem(lblConfirmarBuscar, "Nenhuma receita encontrada.", false); 
-                limparBusca(); 
-                return; 
-            }
             Receita r = lista.get(0); 
             lblDataBuscar.setText("Data: " + r.getData()); 
             lblDoseBuscar.setText("Dose: " + r.getDose() + " " + r.getUnidadeMedida()); 
@@ -211,9 +201,9 @@ public class ReceitaController {
             mostraMensagem(lblConfirmarBuscar, "Data inválida. Use AAAA-MM-DD.", false); 
         } catch (NumberFormatException ex) { 
             mostraMensagem(lblConfirmarBuscar, "Código do medicamento inválido.", false); 
-        } catch (SQLException ex) { 
+        } catch (ServiceException ex) { 
             ex.printStackTrace(); 
-            mostraMensagem(lblConfirmarBuscar, "Erro ao consultar o banco.", false); 
+            mostraMensagem(lblConfirmarBuscar, ex.getMessage(), false); 
             limparBusca(); 
         }
     }
@@ -236,25 +226,17 @@ public class ReceitaController {
             LocalDate.parse(data); 
             int id = Integer.parseInt(idT); 
             double dose = Double.parseDouble(doseT.replace(',', '.')); 
-            if (dose <= 0 || id <= 0) { 
-                mostraMensagem(lblConfirmarAtualizar, "Código e dose devem ser positivos.", false); 
-                return; 
-            } 
-            List<Receita> lista = receitaDAO.busca(cpf, crm, data, id); 
-            if (lista.isEmpty()) { 
-                mostraMensagem(lblConfirmarAtualizar, "Receita não encontrada.", false); 
-                return; 
-            }
-            receitaDAO.atualiza(new Receita(cpf, crm, data, id, dose, unidade, intervalo)); 
+            Receita receita = new Receita(cpf, crm, data, id, dose, unidade, intervalo);
+            receitaService.atualizar(receita);
             mostraMensagem(lblConfirmarAtualizar, "Receita atualizada com sucesso!", true); 
             
         } catch (DateTimeParseException ex) { 
             mostraMensagem(lblConfirmarAtualizar, "Data inválida. Use AAAA-MM-DD.", false); 
         } catch (NumberFormatException ex) { 
             mostraMensagem(lblConfirmarAtualizar, "Código ou dose inválidos.", false); 
-        } catch (SQLException ex) { 
+        } catch (ServiceException ex) { 
             ex.printStackTrace(); 
-            mostraMensagem(lblConfirmarAtualizar, "Erro ao atualizar receita.", false); 
+            mostraMensagem(lblConfirmarAtualizar, ex.getMessage(), false); 
         }
     }
 
@@ -271,13 +253,8 @@ public class ReceitaController {
         }
         try { 
             LocalDate.parse(data); 
-            int id = Integer.parseInt(idT); 
-            List<Receita> lista = receitaDAO.busca(cpf, crm, data, id); 
-            if (lista.isEmpty()) { 
-                mostraMensagem(lblConfirmarRemover, "Receita não encontrada.", false); 
-                return; 
-            } 
-            receitaDAO.remove(lista.get(0)); 
+            int id = Integer.parseInt(idT);
+            receitaService.remover(cpf, crm, data, id);
             mostraMensagem(lblConfirmarRemover, "Receita removida com sucesso!", true); 
             txtRemoverCPF.clear();
             txtRemoverCRM.clear();
@@ -288,9 +265,9 @@ public class ReceitaController {
             mostraMensagem(lblConfirmarRemover, "Data inválida. Use AAAA-MM-DD.", false); 
         } catch (NumberFormatException ex) { 
             mostraMensagem(lblConfirmarRemover, "Código do medicamento inválido.", false); 
-        } catch (SQLException ex) { 
+        } catch (ServiceException ex) { 
             ex.printStackTrace(); 
-            mostraMensagem(lblConfirmarRemover, "Erro ao remover receita.", false); 
+            mostraMensagem(lblConfirmarRemover, ex.getMessage(), false); 
         }
     }
 
@@ -321,7 +298,7 @@ public class ReceitaController {
 
             tabela.getColumns().addAll(colunaCRM, colunaCPF, colunaData, colunaMedicamento);
 
-            tabela.getItems().setAll(receitaDAO.listaTodos());
+            tabela.getItems().setAll(receitaService.listarTodos());
 
             tabela.setColumnResizePolicy(
                 TableView.CONSTRAINED_RESIZE_POLICY
@@ -336,9 +313,9 @@ public class ReceitaController {
 
             mostraMensagem(lblConfirmarListar, "Listagem realizada.", true);
         }
-         catch (SQLException e) {
+         catch (ServiceException e) {
             e.printStackTrace();
-            mostraMensagem(lblConfirmarListar, "Erro ao Listar.", false);
+            mostraMensagem(lblConfirmarListar, e.getMessage(), false);
         }
     }
 
