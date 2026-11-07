@@ -1,16 +1,21 @@
 package br.unicentro.appconsultas.controller;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 import br.unicentro.appconsultas.main.GerenciadorTelas;
-import br.unicentro.appconsultas.dao.implementacoes.MedicamentoDAO;
 import br.unicentro.appconsultas.model.Medicamento;
+import br.unicentro.appconsultas.service.MedicamentoService;
+import br.unicentro.appconsultas.service.ServiceException;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+
+import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
 
 public class MedicamentoController {
 
@@ -23,7 +28,10 @@ public class MedicamentoController {
     @FXML private TextField txtRemoverMedicamentoId;
     @FXML private Label lblConfirmarRemover;
 
-    private final MedicamentoDAO medicamentoDAO = new MedicamentoDAO();
+    @FXML private Label lblConfirmarListar;
+    @FXML private Pane painelLista;
+
+    private final MedicamentoService medicamentoService = new MedicamentoService();
 
     @FXML
     private void btnInicioOnAction(ActionEvent event) {
@@ -93,37 +101,9 @@ public class MedicamentoController {
             return;
         }
 
+        int id=0;
         try {
-            int id = Integer.parseInt(idTexto);
-
-            if (id <= 0) {
-                mostraMensagem(
-                    lblConfirmarCadastro,
-                    "O código deve ser um número positivo.",
-                    false
-                );
-                return;
-            }
-
-            if (medicamentoDAO.buscaPorCodigo(id) != null) {
-                mostraMensagem(
-                    lblConfirmarCadastro,
-                    "Já existe um medicamento com esse código.",
-                    false
-                );
-                return;
-            }
-
-            medicamentoDAO.insere(new Medicamento(id, nome));
-
-            mostraMensagem(
-                lblConfirmarCadastro,
-                "Medicamento cadastrado com sucesso!",
-                true
-            );
-
-            txtMedicamentoId.clear();
-            txtNome.clear();
+            id = Integer.parseInt(idTexto);
 
         } catch (NumberFormatException ex) {
             mostraMensagem(
@@ -131,14 +111,27 @@ public class MedicamentoController {
                 "O código deve ser um número inteiro.",
                 false
             );
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+        } 
+        Medicamento medicamento = new Medicamento(id, nome);
+        try{
+            medicamentoService.cadastrar(medicamento);
+            
             mostraMensagem(
                 lblConfirmarCadastro,
-                "Erro ao cadastrar medicamento. Verifique o banco de dados.",
-                false
+                "Medicamento cadastrado com sucesso!",
+                true
             );
         }
+        catch(ServiceException ex){
+            mostraMensagem(
+            lblConfirmarCadastro,
+            ex.getMessage(),
+            false
+            );
+        }
+
+        txtMedicamentoId.clear();
+        txtNome.clear();
     }
 
     @FXML 
@@ -153,22 +146,15 @@ public class MedicamentoController {
         
         try { 
             int id = Integer.parseInt(idTexto); 
-            Medicamento m = medicamentoDAO.buscaPorCodigo(id); 
-            
-            if (m == null) { 
-                mostraMensagem(lblConfirmarBuscar, "Medicamento não encontrado.", false); 
-                lblNomeBuscar.setText(""); 
-                return; 
-            } 
-            
-            lblNomeBuscar.setText("Código: " + m.getMedicamentoId() + " | Nome: " + m.getNome()); 
+            Medicamento m = medicamentoService.buscar(id);
             mostraMensagem(lblConfirmarBuscar, "Medicamento encontrado.", true); 
-            
+            lblNomeBuscar.setText("Código: " + m.getMedicamentoId() + " | Nome: " + m.getNome());    
         } catch (NumberFormatException ex) { 
             mostraMensagem(lblConfirmarBuscar, "O código deve ser um número inteiro.", false); 
-        } catch (SQLException ex) { 
-            ex.printStackTrace(); 
-            mostraMensagem(lblConfirmarBuscar, "Erro ao consultar o banco de dados.", false); 
+        }
+        catch (ServiceException ex){
+            lblNomeBuscar.setText(""); 
+            mostraMensagem(lblConfirmarBuscar, ex.getMessage(), false);
         }
     }
 
@@ -184,20 +170,14 @@ public class MedicamentoController {
         
         try { 
             int id = Integer.parseInt(idTexto); 
-            
-            if (medicamentoDAO.buscaPorCodigo(id) == null) { 
-                mostraMensagem(lblConfirmarAtualizar, "Medicamento não encontrado.", false); 
-                return; 
-            } 
-            
-            medicamentoDAO.atualiza(new Medicamento(id, nome)); 
+            Medicamento medicamento = new Medicamento(id, nome);
+            medicamentoService.atualizar(medicamento);
             mostraMensagem(lblConfirmarAtualizar, "Medicamento atualizado com sucesso!", true); 
             
         } catch (NumberFormatException ex) { 
             mostraMensagem(lblConfirmarAtualizar, "O código deve ser um número inteiro.", false); 
-        } catch (SQLException ex) { 
-            ex.printStackTrace(); 
-            mostraMensagem(lblConfirmarAtualizar, "Erro ao atualizar medicamento.", false); 
+        } catch (ServiceException ex) { 
+            mostraMensagem(lblConfirmarAtualizar, ex.getMessage(), false); 
         }
     }
 
@@ -211,23 +191,54 @@ public class MedicamentoController {
         }
         
         try { 
-            int id = Integer.parseInt(idTexto); 
-            Medicamento m = medicamentoDAO.buscaPorCodigo(id); 
-            
-            if (m == null) { 
-                mostraMensagem(lblConfirmarRemover, "Medicamento não encontrado.", false); 
-                return; 
-            } 
-            
-            medicamentoDAO.remove(m); 
+            int id = Integer.parseInt(idTexto);
+            medicamentoService.remover(id);
             mostraMensagem(lblConfirmarRemover, "Medicamento removido com sucesso!", true); 
             txtRemoverMedicamentoId.clear(); 
             
         } catch (NumberFormatException ex) { 
             mostraMensagem(lblConfirmarRemover, "O código deve ser um número inteiro.", false); 
-        } catch (SQLException ex) { 
-            ex.printStackTrace(); 
-            mostraMensagem(lblConfirmarRemover, "Erro ao remover. Verifique se há receitas associadas.", false); 
+        } catch (ServiceException ex) { 
+            mostraMensagem(lblConfirmarRemover, ex.getMessage(), false); 
+        }
+    }
+
+    @FXML
+    private void btnListarMedicamentoOnAction(ActionEvent event) {
+        try{
+
+            TableView<Medicamento> tabela = new TableView<>();
+            
+            TableColumn<Medicamento, Integer> colunaMedicamentoId = new TableColumn("Identificador");
+            colunaMedicamentoId.setCellValueFactory(new  PropertyValueFactory<>("medicamentoId"));
+    
+            TableColumn<Medicamento, String> colunaNome = new TableColumn("Nome");
+            colunaNome.setCellValueFactory(new  PropertyValueFactory<>("nome"));
+
+            colunaMedicamentoId.setPrefWidth(160);
+            colunaNome.setPrefWidth(160);
+
+
+            tabela.getColumns().addAll(colunaMedicamentoId, colunaNome);
+
+            tabela.getItems().setAll(medicamentoService.listarTodos());
+
+            tabela.setColumnResizePolicy(
+                TableView.CONSTRAINED_RESIZE_POLICY
+            );
+
+            tabela.setPrefHeight(28 + (tabela.getItems().size() * 24) + 5);
+            tabela.setMinHeight(28 + (tabela.getItems().size() * 24) + 5);
+            tabela.setMaxHeight(8 + (tabela.getItems().size() * 24) + 5);
+
+            painelLista.getChildren().clear();
+            painelLista.getChildren().add(tabela);
+
+            mostraMensagem(lblConfirmarListar, "Listagem realizada.", true);
+        }
+         catch (ServiceException ex) {
+            ex.printStackTrace();
+            mostraMensagem(lblConfirmarListar, ex.getMessage(), false);
         }
     }
 

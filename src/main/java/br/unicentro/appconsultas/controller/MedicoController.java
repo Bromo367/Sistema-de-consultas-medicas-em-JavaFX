@@ -1,6 +1,9 @@
 package br.unicentro.appconsultas.controller;
+
 import br.unicentro.appconsultas.main.GerenciadorTelas;
 import br.unicentro.appconsultas.dao.implementacoes.MedicoDAO;
+import br.unicentro.appconsultas.service.MedicoService;
+import br.unicentro.appconsultas.service.ServiceException;
 import br.unicentro.appconsultas.model.Medico;
 
 import java.sql.SQLException;
@@ -10,7 +13,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.event.ActionEvent;
 
+import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
+
 import java.io.IOException;
+import java.security.Provider.Service;
 public class MedicoController {
 
     @FXML private TextField txtNome, txtCRM, txtEspecializacao, txtTelefone;
@@ -22,7 +31,15 @@ public class MedicoController {
     @FXML private TextField txtRemoverCRM;
     @FXML private Label lblConfirmarRemover;
 
+    @FXML
+    private Label lblConfirmarListar;
+
+    @FXML
+    private Pane painelLista;
+
     private final MedicoDAO medicoDAO = new MedicoDAO();
+
+    private final MedicoService medicoService = new MedicoService();
 
     @FXML
     private void btnInicioOnAction(ActionEvent event) {
@@ -91,15 +108,16 @@ public class MedicoController {
         }
 
         try {
-            medicoDAO.insere(new Medico(crm, nome, esp, tel));
+            Medico medico = new Medico(crm, nome, esp, tel);
+            medicoService.cadastrar(medico);
             mostrarMensagem(lblConfirmarCadastro, "Médico cadastrado com sucesso!", true);
             txtCRM.clear();
             txtNome.clear();
             txtEspecializacao.clear();
             txtTelefone.clear();
-        } catch (SQLException ex) {
+        } catch (ServiceException ex) {
             ex.printStackTrace();
-            mostrarMensagem(lblConfirmarCadastro, "Erro ao cadastrar. Confira o CRM e a conexão com o banco.", false);
+            mostrarMensagem(lblConfirmarCadastro, ex.getMessage(), false);
         }
     }
 
@@ -114,13 +132,7 @@ public class MedicoController {
         }
 
         try {
-            Medico m = medicoDAO.buscaPorCodigo(crm);
-            
-            if (m == null) {
-                mostrarMensagem(lblConfirmarBuscar, "Nenhum médico encontrado com esse CRM.", false);
-                limparBusca();
-                return;
-            }
+            Medico m = medicoService.buscar(crm);
 
             lblCRMBuscar.setText("CRM: " + m.getCrmMedico());
             lblNomeBuscar.setText("Nome: " + m.getNome());
@@ -128,9 +140,9 @@ public class MedicoController {
             lblTelefoneBuscar.setText("Telefone: " + m.getTelefone());
             mostrarMensagem(lblConfirmarBuscar, "Médico encontrado.", true);
             
-        } catch (SQLException ex) {
+        } catch (ServiceException ex) {
             ex.printStackTrace();
-            mostrarMensagem(lblConfirmarBuscar, "Erro ao consultar o banco de dados.", false);
+            mostrarMensagem(lblConfirmarBuscar, ex.getMessage(), false);
             limparBusca();
         }
     }
@@ -148,17 +160,13 @@ public class MedicoController {
         }
 
         try {
-            if (medicoDAO.buscaPorCodigo(crm) == null) {
-                mostrarMensagem(lblConfirmarAtualizar, "Não existe médico cadastrado com esse CRM.", false);
-                return;
-            }
-            
-            medicoDAO.atualiza(new Medico(crm, nome, esp, tel));
+            Medico medico = new Medico(crm, nome, esp, tel);
+            medicoService.atualizar(medico);
             mostrarMensagem(lblConfirmarAtualizar, "Médico atualizado com sucesso!", true);
             
-        } catch (SQLException ex) {
+        } catch (ServiceException ex) {
             ex.printStackTrace();
-            mostrarMensagem(lblConfirmarAtualizar, "Erro ao atualizar. Confira a conexão com o banco.", false);
+            mostrarMensagem(lblConfirmarAtualizar, ex.getMessage(), false);
         }
     }
 
@@ -172,20 +180,61 @@ public class MedicoController {
         }
 
         try {
-            Medico m = medicoDAO.buscaPorCodigo(crm);
-            
-            if (m == null) {
-                mostrarMensagem(lblConfirmarRemover, "Não existe médico cadastrado com esse CRM.", false);
-                return;
-            }
-            
-            medicoDAO.remove(m);
+            medicoService.remover(crm);
             mostrarMensagem(lblConfirmarRemover, "Médico removido com sucesso!", true);
             txtRemoverCRM.clear();
             
-        } catch (SQLException ex) {
+        } catch (ServiceException ex) {
             ex.printStackTrace();
-            mostrarMensagem(lblConfirmarRemover, "Erro ao remover. Verifique se existem consultas associadas.", false);
+            mostrarMensagem(lblConfirmarRemover, ex.getMessage(), false);
+        }
+    }
+
+    @FXML
+    private void btnListarMedicoOnAction(ActionEvent event) {
+        try{
+
+            TableView<Medico> tabela = new TableView<>();
+            
+            TableColumn<Medico, String> colunaCRM = new TableColumn("CRM");
+            colunaCRM.setCellValueFactory(new  PropertyValueFactory<>("crmMedico"));
+    
+            TableColumn<Medico, String> colunaNome = new TableColumn("Nome");
+            colunaNome.setCellValueFactory(new  PropertyValueFactory<>("nome"));
+
+            TableColumn<Medico, String> colunaEspecializacao = new TableColumn("Especializacao");
+            colunaEspecializacao.setCellValueFactory(new  PropertyValueFactory<>("especializacao"));
+    
+            TableColumn<Medico, String> colunaTelefone = new TableColumn("Telefone");
+            colunaTelefone.setCellValueFactory(new  PropertyValueFactory<>("telefone"));
+
+    
+            colunaCRM.setPrefWidth(160);
+            colunaNome.setPrefWidth(160);
+            colunaEspecializacao.setPrefWidth(160);
+            colunaTelefone.setPrefWidth(160);
+            
+
+            tabela.getColumns().addAll(colunaCRM, colunaNome, colunaEspecializacao, colunaTelefone);
+
+            tabela.getItems().setAll(medicoService.listarTodos());
+
+            tabela.setColumnResizePolicy(
+                TableView.CONSTRAINED_RESIZE_POLICY
+            );
+
+            tabela.setPrefHeight(28 + (tabela.getItems().size() * 24) + 5);
+            tabela.setMinHeight(28 + (tabela.getItems().size() * 24) + 5);
+            tabela.setMaxHeight(8 + (tabela.getItems().size() * 24) + 5);
+
+            painelLista.getChildren().clear();
+            painelLista.getChildren().add(tabela);
+
+            mostrarMensagem(lblConfirmarListar, "Listagem Realizada.", true);
+        }
+         catch (ServiceException e) {
+            e.printStackTrace();
+            mostrarMensagem(lblConfirmarListar, e.getMessage(), false);
         }
     }
 

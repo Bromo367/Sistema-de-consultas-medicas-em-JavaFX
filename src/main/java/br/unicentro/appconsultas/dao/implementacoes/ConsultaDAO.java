@@ -30,7 +30,7 @@ public class ConsultaDAO implements IConsulta{
             PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setString(1, consulta.getCpfPaciente());
             stmt.setString(2, consulta.getCrmMedico());
-            stmt.setString(3, consulta.getData());
+            stmt.setDate(3, java.sql.Date.valueOf(consulta.getData()));
             stmt.executeUpdate();
         }
     }
@@ -38,7 +38,7 @@ public class ConsultaDAO implements IConsulta{
     @Override 
 	public List<Consulta> busca(String cpfPaciente, String crmMedico, String data) throws SQLException{
         String sql = "SELECT * FROM consulta WHERE ";
-        List<String> strsBusca = new ArrayList<>();
+        List<Object> strsBusca = new ArrayList<>();
         if(cpfPaciente == null && crmMedico == null && data == null){
             return listaTodos();
         }
@@ -52,7 +52,7 @@ public class ConsultaDAO implements IConsulta{
         }
         if(data!=null){
             sql=sql+"data = ? AND ";
-            strsBusca.add(data);
+            strsBusca.add(java.sql.Date.valueOf(data));
         }
         sql=sql.substring(0, sql.length()-5)+" ORDER BY cpfPaciente";
         List<Consulta> consultas = new ArrayList<>();
@@ -60,13 +60,17 @@ public class ConsultaDAO implements IConsulta{
         try (Connection con = Conexao.getConexao();
             PreparedStatement stmt = con.prepareStatement(sql)){
             int i=1;
-            for(String str:strsBusca){
-                stmt.setString(i,str);
+            for(Object parametro:strsBusca){
+                if(parametro instanceof java.sql.Date){
+                    stmt.setDate(i, (java.sql.Date) parametro);
+                } else {
+                    stmt.setString(i, (String) parametro);
+                }
                 i++;
             }
             try(ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    consultas.add(new Consulta(rs.getString("cpfPaciente"),rs.getString("crmMedico"),rs.getString("data")));
+                    consultas.add(new Consulta(rs.getString("cpfPaciente"),rs.getString("crmMedico"),rs.getDate("data").toString()));
                 }
                 
             }

@@ -172,7 +172,7 @@
                               </Button>
                               <Label fx:id="lblConfirmarEmitir" prefHeight="28.0" prefWidth="427.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="7">
                                     <font>
-                                       <Font size="10.0" />
+                                       <Font size="18.0" />
                                     </font>
                               </Label>
                               <Label layoutX="40.0" layoutY="103.0" text="Dosagem" GridPane.rowIndex="4">
@@ -379,7 +379,7 @@
                                     <Insets left="90.0" top="10.0" />
                                  </GridPane.margin>
                               </Button>
-                              <Label fx:id="lblConfirmarAtualizar" prefHeight="21.0" prefWidth="0.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
+                              <Label fx:id="lblConfirmarAtualizar" prefHeight="21.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
                                  <font>
                                     <Font size="15.0" />
                                  </font>
@@ -493,6 +493,48 @@
                               <TextField fx:id="txtRemoverData" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                            </children>
                         </GridPane>
+                     </children>
+                  </VBox>
+                  <Separator prefWidth="200.0" />
+                  <VBox prefHeight="300.0" prefWidth="100.0">
+                     <children>
+                        <Label text="Listar Todos">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </Label>
+                        <GridPane>
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <Button fx:id="btnListarReceita" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#btnListarReceitaOnAction" prefHeight="35.0" prefWidth="220.0" text="Listar">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <GridPane.margin>
+                                    <Insets left="90.0" top="10.0" />
+                                 </GridPane.margin>
+                              </Button>
+                              <Label fx:id="lblConfirmarListar" prefHeight="21.0" prefWidth="200.0" GridPane.columnIndex="1">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </GridPane>
+                        <VBox fx:id="painelLista" prefHeight="240.0" prefWidth="100.0">
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
+                        </VBox>
                      </children>
                   </VBox>
                </children>

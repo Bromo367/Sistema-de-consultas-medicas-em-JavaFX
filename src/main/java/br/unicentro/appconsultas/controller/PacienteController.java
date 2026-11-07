@@ -1,16 +1,20 @@
 package br.unicentro.appconsultas.controller;
+
 import br.unicentro.appconsultas.main.GerenciadorTelas;
-import br.unicentro.appconsultas.dao.implementacoes.PacienteDAO;
 import br.unicentro.appconsultas.model.Paciente;
-
-import java.sql.SQLException;
-
-import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.event.ActionEvent;
+import br.unicentro.appconsultas.service.PacienteService;
+import br.unicentro.appconsultas.service.ServiceException;
 
 import java.io.IOException;
+
+import javafx.fxml.FXML;
+import javafx.event.ActionEvent;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
 
 public class PacienteController {
 
@@ -46,7 +50,10 @@ public class PacienteController {
     @FXML private TextField txtRemoverCPF;
     @FXML private Label lblConfirmarRemover;
 
-    private final PacienteDAO pacienteDAO = new PacienteDAO();
+    @FXML private Label lblConfirmarListar;
+    @FXML private Pane painelLista;
+
+    private final PacienteService pacienteService = new PacienteService();
 
     
     @FXML
@@ -122,23 +129,16 @@ public class PacienteController {
             double peso = Double.parseDouble(pesoTexto);
             double altura = Double.parseDouble(alturaTexto);
 
-            if (idade <= 0 || peso <= 0 || altura <= 0) {
-                mostrarMensagem(lblConfirmarCadastro, "Insira valores válidos.", false);
-                return;
-            }
-
             Paciente paciente = new Paciente(cpf, nome, idade, peso, altura, telefone);
-            pacienteDAO.insere(paciente);
+            pacienteService.cadastrar(paciente);
             mostrarMensagem(lblConfirmarCadastro, "Paciente cadastrado com sucesso!", true);
             limparCadastro();
 
         } catch (NumberFormatException e) {
-            mostrarMensagem(lblConfirmarCadastro,
-                    "Verifique os valores.", false);
-        } catch (SQLException e) {
+            mostrarMensagem(lblConfirmarCadastro, "Verifique o tipo dos valores.", false);
+        } catch (ServiceException e) {
             e.printStackTrace();
-            mostrarMensagem(lblConfirmarCadastro,
-                    "Erro ao cadastrar. Confira o CPF e a conexão com o banco.", false);
+            mostrarMensagem(lblConfirmarCadastro, e.getMessage(), false);
         }
     }
 
@@ -152,13 +152,7 @@ public class PacienteController {
             return;
         }
         try {
-            Paciente paciente = pacienteDAO.buscaPorCodigo(cpf);
-            if (paciente == null) {
-                mostrarMensagem(lblConfirmarBuscar,
-                        "Nenhum paciente encontrado com esse CPF.", false);
-                limparResultadoBusca();
-                return;
-            }
+            Paciente paciente = pacienteService.buscar(cpf);
 
             lblCPFBuscar.setText("CPF: " + paciente.getCpfPaciente());
             lblNomeBuscar.setText("Nome: " + paciente.getNome());
@@ -168,13 +162,13 @@ public class PacienteController {
             lblTelefoneBuscar.setText("Telefone: " + paciente.getTelefone());
             
             mostrarMensagem(lblConfirmarBuscar, "Paciente encontrado.", true);
-            limparResultadoBusca();
+
             
-        } catch (SQLException e) {
+        } catch (ServiceException e) {
             e.printStackTrace();
             limparResultadoBusca();
             mostrarMensagem(lblConfirmarBuscar,
-                    "Erro ao consultar o banco de dados.", false);
+                    e.getMessage(), false);
         }
     }
 
@@ -199,30 +193,18 @@ public class PacienteController {
             double peso = Double.parseDouble(pesoTexto);
             double altura = Double.parseDouble(alturaTexto);
 
-            if (idade <= 0 || peso <= 0 || altura <= 0) {
-                mostrarMensagem(lblConfirmarAtualizar, "Insira valores válidos.", false);
-                return;
-            }
-
-            Paciente existente = pacienteDAO.buscaPorCodigo(cpf);
-            if (existente == null) {
-                mostrarMensagem(lblConfirmarAtualizar,
-                        "Não existe paciente cadastrado com esse CPF.", false);
-                return;
-            }
-
-            Paciente pacienteAtualizado = new Paciente(cpf, nome, idade, peso, altura, telefone);
-            pacienteDAO.atualiza(pacienteAtualizado);
+            Paciente paciente = new Paciente(cpf, nome, idade, peso, altura, telefone);
+            pacienteService.atualizar(paciente);
 
             mostrarMensagem(lblConfirmarAtualizar, "Paciente atualizado com sucesso!", true);
         
         } catch (NumberFormatException e) {
             mostrarMensagem(lblConfirmarAtualizar,
-                    "Verifique os valores.", false);
-        } catch (SQLException e) {
+                    "Verifique os tipos dos valores.", false);
+        } catch (ServiceException e) {
             e.printStackTrace();
             mostrarMensagem(lblConfirmarAtualizar,
-                    "Erro ao atualizar. Confira a conexão com o banco.", false);
+                    e.getMessage(), false);
         }
     }
 
@@ -235,22 +217,67 @@ public class PacienteController {
         }
 
         try {
-            Paciente paciente = pacienteDAO.buscaPorCodigo(cpf);
-            if (paciente == null) {
-                mostrarMensagem(lblConfirmarRemover,
-                        "Não existe paciente cadastrado com esse CPF.", false);
-                return;
-            }
-
-            pacienteDAO.remove(paciente);
+            pacienteService.remover(cpf);
             mostrarMensagem(lblConfirmarRemover, "Paciente removido com sucesso!", true);
             txtRemoverCPF.clear();
-        } catch (SQLException e) {
+        } catch (ServiceException e) {
             e.printStackTrace();
             mostrarMensagem(lblConfirmarRemover,
-                    "Erro ao remover. Verifique se o paciente possui consultas ou receitas associadas.", false);
+                    e.getMessage(), false);
         }
     }
+
+    @FXML
+    private void btnListarPacienteOnAction(ActionEvent event) {
+        try{
+
+            TableView<Paciente> tabela = new TableView<>();
+            
+            TableColumn<Paciente, String> colunaCPF = new TableColumn("CPF");
+            colunaCPF.setCellValueFactory(new  PropertyValueFactory<>("cpfPaciente"));
+    
+            TableColumn<Paciente, String> colunaNome = new TableColumn("Nome");
+            colunaNome.setCellValueFactory(new  PropertyValueFactory<>("nome"));
+
+            TableColumn<Paciente, Integer> colunaIdade = new TableColumn("Idade");
+            colunaIdade.setCellValueFactory(new  PropertyValueFactory<>("idade"));
+    
+            TableColumn<Paciente, Double> colunaPeso = new TableColumn("Peso");
+            colunaPeso.setCellValueFactory(new  PropertyValueFactory<>("peso"));
+
+            TableColumn<Paciente, Double> colunaAltura = new TableColumn("Altura");
+            colunaAltura.setCellValueFactory(new  PropertyValueFactory<>("altura"));
+    
+            colunaCPF.setPrefWidth(160);
+            colunaNome.setPrefWidth(160);
+            colunaIdade.setPrefWidth(160);
+            colunaPeso.setPrefWidth(160);
+            colunaAltura.setPrefWidth(160);
+
+
+            tabela.getColumns().addAll(colunaCPF, colunaNome, colunaIdade, colunaPeso, colunaAltura);
+
+            tabela.getItems().setAll(pacienteService.listarTodos());
+
+            tabela.setColumnResizePolicy(
+                TableView.CONSTRAINED_RESIZE_POLICY
+            );
+
+            tabela.setPrefHeight(28 + (tabela.getItems().size() * 24) + 5);
+            tabela.setMinHeight(28 + (tabela.getItems().size() * 24) + 5);
+            tabela.setMaxHeight(8 + (tabela.getItems().size() * 24) + 5);
+
+            painelLista.getChildren().clear();
+            painelLista.getChildren().add(tabela);
+
+            mostrarMensagem(lblConfirmarListar, "Listagem realizada.", true);
+        }
+         catch (ServiceException e) {
+            e.printStackTrace();
+            mostrarMensagem(lblConfirmarListar, e.getMessage(), false);
+        }
+    }
+
 
     private void mostrarMensagem(Label label, String msg, boolean sucesso) {
         if (label == null) {
