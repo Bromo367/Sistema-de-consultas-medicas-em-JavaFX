@@ -1,6 +1,9 @@
 package br.unicentro.appconsultas.controller;
+
 import br.unicentro.appconsultas.main.GerenciadorTelas;
 import br.unicentro.appconsultas.dao.implementacoes.MedicoDAO;
+import br.unicentro.appconsultas.service.MedicoService;
+import br.unicentro.appconsultas.service.ServiceException;
 import br.unicentro.appconsultas.model.Medico;
 
 import java.sql.SQLException;
@@ -16,6 +19,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
+import java.security.Provider.Service;
 public class MedicoController {
 
     @FXML private TextField txtNome, txtCRM, txtEspecializacao, txtTelefone;
@@ -34,6 +38,8 @@ public class MedicoController {
     private Pane painelLista;
 
     private final MedicoDAO medicoDAO = new MedicoDAO();
+
+    private final MedicoService medicoService = new MedicoService();
 
     @FXML
     private void btnInicioOnAction(ActionEvent event) {
@@ -102,15 +108,16 @@ public class MedicoController {
         }
 
         try {
-            medicoDAO.insere(new Medico(crm, nome, esp, tel));
+            Medico medico = new Medico(crm, nome, esp, tel);
+            medicoService.cadastrar(medico);
             mostrarMensagem(lblConfirmarCadastro, "Médico cadastrado com sucesso!", true);
             txtCRM.clear();
             txtNome.clear();
             txtEspecializacao.clear();
             txtTelefone.clear();
-        } catch (SQLException ex) {
+        } catch (ServiceException ex) {
             ex.printStackTrace();
-            mostrarMensagem(lblConfirmarCadastro, "Erro ao cadastrar. Confira o CRM e a conexão com o banco.", false);
+            mostrarMensagem(lblConfirmarCadastro, ex.getMessage(), false);
         }
     }
 
@@ -125,13 +132,7 @@ public class MedicoController {
         }
 
         try {
-            Medico m = medicoDAO.buscaPorCodigo(crm);
-            
-            if (m == null) {
-                mostrarMensagem(lblConfirmarBuscar, "Nenhum médico encontrado com esse CRM.", false);
-                limparBusca();
-                return;
-            }
+            Medico m = medicoService.buscar(crm);
 
             lblCRMBuscar.setText("CRM: " + m.getCrmMedico());
             lblNomeBuscar.setText("Nome: " + m.getNome());
@@ -139,9 +140,9 @@ public class MedicoController {
             lblTelefoneBuscar.setText("Telefone: " + m.getTelefone());
             mostrarMensagem(lblConfirmarBuscar, "Médico encontrado.", true);
             
-        } catch (SQLException ex) {
+        } catch (ServiceException ex) {
             ex.printStackTrace();
-            mostrarMensagem(lblConfirmarBuscar, "Erro ao consultar o banco de dados.", false);
+            mostrarMensagem(lblConfirmarBuscar, ex.getMessage(), false);
             limparBusca();
         }
     }
@@ -159,17 +160,13 @@ public class MedicoController {
         }
 
         try {
-            if (medicoDAO.buscaPorCodigo(crm) == null) {
-                mostrarMensagem(lblConfirmarAtualizar, "Não existe médico cadastrado com esse CRM.", false);
-                return;
-            }
-            
-            medicoDAO.atualiza(new Medico(crm, nome, esp, tel));
+            Medico medico = new Medico(crm, nome, esp, tel);
+            medicoService.atualizar(medico);
             mostrarMensagem(lblConfirmarAtualizar, "Médico atualizado com sucesso!", true);
             
-        } catch (SQLException ex) {
+        } catch (ServiceException ex) {
             ex.printStackTrace();
-            mostrarMensagem(lblConfirmarAtualizar, "Erro ao atualizar. Confira a conexão com o banco.", false);
+            mostrarMensagem(lblConfirmarAtualizar, ex.getMessage(), false);
         }
     }
 
@@ -183,20 +180,13 @@ public class MedicoController {
         }
 
         try {
-            Medico m = medicoDAO.buscaPorCodigo(crm);
-            
-            if (m == null) {
-                mostrarMensagem(lblConfirmarRemover, "Não existe médico cadastrado com esse CRM.", false);
-                return;
-            }
-            
-            medicoDAO.remove(m);
+            medicoService.remover(crm);
             mostrarMensagem(lblConfirmarRemover, "Médico removido com sucesso!", true);
             txtRemoverCRM.clear();
             
-        } catch (SQLException ex) {
+        } catch (ServiceException ex) {
             ex.printStackTrace();
-            mostrarMensagem(lblConfirmarRemover, "Erro ao remover. Verifique se existem consultas associadas.", false);
+            mostrarMensagem(lblConfirmarRemover, ex.getMessage(), false);
         }
     }
 
@@ -227,7 +217,7 @@ public class MedicoController {
 
             tabela.getColumns().addAll(colunaCRM, colunaNome, colunaEspecializacao, colunaTelefone);
 
-            tabela.getItems().setAll(medicoDAO.listaTodos());
+            tabela.getItems().setAll(medicoService.listarTodos());
 
             tabela.setColumnResizePolicy(
                 TableView.CONSTRAINED_RESIZE_POLICY
@@ -242,9 +232,9 @@ public class MedicoController {
 
             mostrarMensagem(lblConfirmarListar, "Listagem Realizada.", true);
         }
-         catch (SQLException e) {
+         catch (ServiceException e) {
             e.printStackTrace();
-            mostrarMensagem(lblConfirmarListar, "Erro ao Listar.", false);
+            mostrarMensagem(lblConfirmarListar, e.getMessage(), false);
         }
     }
 

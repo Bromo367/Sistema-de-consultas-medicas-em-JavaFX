@@ -1,16 +1,16 @@
 package br.unicentro.appconsultas.controller;
-import br.unicentro.appconsultas.dao.implementacoes.BancoDAO;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 import br.unicentro.appconsultas.main.GerenciadorTelas;
+import br.unicentro.appconsultas.service.BancoService;
+import br.unicentro.appconsultas.service.ServiceException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
 public class InicioController {
 
-    private final BancoDAO bancoDAO = new BancoDAO();
+    private final BancoService bancoService = new BancoService();
 
     @FXML
     private void btnInicioOnAction(ActionEvent event) {
@@ -96,8 +96,8 @@ public class InicioController {
     @FXML
     private void btnApagarTudoOnAction(ActionEvent event) {
         try {
-            bancoDAO.apagarTudo();
-        } catch (SQLException ex) { 
+            bancoService.apagarTudo();
+        } catch (ServiceException ex) { 
             ex.printStackTrace(); 
         }
     }

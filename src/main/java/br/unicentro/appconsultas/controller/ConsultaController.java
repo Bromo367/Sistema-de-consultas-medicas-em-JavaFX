@@ -1,20 +1,14 @@
 package br.unicentro.appconsultas.controller;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
 import br.unicentro.appconsultas.main.GerenciadorTelas;
-import br.unicentro.appconsultas.dao.implementacoes.ConsultaDAO;
 import br.unicentro.appconsultas.model.Consulta;
-import br.unicentro.appconsultas.dao.implementacoes.PacienteDAO;
-import br.unicentro.appconsultas.dao.implementacoes.MedicoDAO;
-
-
-
+import br.unicentro.appconsultas.service.ConsultaService;
+import br.unicentro.appconsultas.service.ServiceException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -38,9 +32,7 @@ public class ConsultaController {
     @FXML private Label lblConfirmarListar;
     @FXML private Pane painelLista;
 
-    private final ConsultaDAO consultaDAO = new ConsultaDAO();
-    private final PacienteDAO pacienteDAO = new PacienteDAO();
-    private final MedicoDAO medicoDAO = new MedicoDAO();
+    private final ConsultaService consultaService = new ConsultaService();
 
     @FXML
     private void btnInicioOnAction(ActionEvent event) {
@@ -112,23 +104,8 @@ public class ConsultaController {
     }
     try {
         validarData(data);
-        if (pacienteDAO.buscaPorCodigo(cpf) == null) {
-            mostraMensagem(
-                lblConfirmarCadastro,
-                "Paciente não cadastrado. Verifique o CPF.",
-                false
-            );
-            return;
-        }
-        if (medicoDAO.buscaPorCodigo(crm) == null) {
-            mostraMensagem(
-                lblConfirmarCadastro,
-                "Médico não cadastrado. Verifique o CRM.",
-                false
-            );
-            return;
-        }
-        consultaDAO.insere(new Consulta(cpf, crm, data));
+        Consulta consulta = new Consulta(cpf, crm, data);
+        consultaService.cadastrar(consulta);
         mostraMensagem(
             lblConfirmarCadastro,
             "Consulta cadastrada com sucesso!",
@@ -143,11 +120,11 @@ public class ConsultaController {
             "Data inválida. Use o formato AAAA/MM/DD.",
             false
         );
-    } catch (SQLException ex) {
+    } catch (ServiceException ex) {
         ex.printStackTrace();
         mostraMensagem(
             lblConfirmarCadastro,
-            "Erro ao acessar o banco ou cadastrar a consulta.",
+            ex.getMessage(),
             false
         );
     }
@@ -169,16 +146,11 @@ public class ConsultaController {
                 validarData(data);
             }
             
-            List<Consulta> lista = consultaDAO.busca(
+            List<Consulta> lista = consultaService.buscar(
                 cpf.isEmpty() ? null : cpf, 
                 crm.isEmpty() ? null : crm, 
                 data.isEmpty() ? null : data
             );
-            
-            if (lista.isEmpty()) { 
-                mostraMensagem(lblConfirmarBuscar, "Nenhuma consulta encontrada.", false); 
-                return; 
-            }
             
             StringBuilder sb = new StringBuilder("Consultas encontradas: "); 
             for (Consulta c : lista) {
@@ -191,9 +163,9 @@ public class ConsultaController {
             
         } catch (DateTimeParseException ex) { 
             mostraMensagem(lblConfirmarBuscar, "Data inválida. Use AAAA-MM-DD.", false); 
-        } catch (SQLException ex) { 
+        } catch (ServiceException ex) { 
             ex.printStackTrace(); 
-            mostraMensagem(lblConfirmarBuscar, "Erro ao consultar o banco de dados.", false); 
+            mostraMensagem(lblConfirmarBuscar, ex.getMessage(), false); 
         }
     }
     
@@ -215,14 +187,7 @@ public class ConsultaController {
         
         try { 
             validarData(data); 
-            List<Consulta> lista = consultaDAO.busca(cpf, crm, data); 
-            
-            if (lista.isEmpty()) { 
-                mostraMensagem(lblConfirmarRemover, "Consulta não encontrada.", false); 
-                return; 
-            } 
-            
-            consultaDAO.remove(lista.get(0)); 
+            consultaService.remover(cpf, crm, data);
             mostraMensagem(lblConfirmarRemover, "Consulta removida com sucesso!", true); 
             txtRemoverCPFPaciente.clear();
             txtRemoverCRMMedico.clear();
@@ -230,9 +195,9 @@ public class ConsultaController {
             
         } catch (DateTimeParseException ex) { 
             mostraMensagem(lblConfirmarRemover, "Data inválida. Use AAAA-MM-DD.", false); 
-        } catch (SQLException ex) { 
+        } catch (ServiceException ex) { 
             ex.printStackTrace(); 
-            mostraMensagem(lblConfirmarRemover, "Erro ao remover. Verifique se há receitas associadas.", false); 
+            mostraMensagem(lblConfirmarRemover, ex.getMessage(), false); 
         }
     }
 
@@ -258,7 +223,7 @@ public class ConsultaController {
 
             tabela.getColumns().addAll(colunaCPF, colunaCRM, colunaData);
 
-            tabela.getItems().setAll(consultaDAO.listaTodos());
+            tabela.getItems().setAll(consultaService.listarTodos());
 
             tabela.setColumnResizePolicy(
                 TableView.CONSTRAINED_RESIZE_POLICY
@@ -273,9 +238,9 @@ public class ConsultaController {
 
             mostraMensagem(lblConfirmarListar, "Listagem realizada.", true);
         }
-         catch (SQLException e) {
+         catch (ServiceException e) {
             e.printStackTrace();
-            mostraMensagem(lblConfirmarListar, "Erro ao Listar.", false);
+            mostraMensagem(lblConfirmarListar, e.getMessage(), false);
         }
     }
     
