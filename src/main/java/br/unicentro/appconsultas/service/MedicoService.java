@@ -4,14 +4,16 @@ import java.sql.SQLException;
 import java.util.List;
 
 import br.unicentro.appconsultas.model.Medico;
-import br.unicentro.appconsultas.model.Paciente;
 import br.unicentro.appconsultas.dao.implementacoes.MedicoDAO;
+import br.unicentro.appconsultas.dao.interfaces.IMedico;
+
 
 
 public class MedicoService {
-    private final MedicoDAO medicoDAO = new MedicoDAO();
+    private final IMedico medicoDAO = new MedicoDAO();
 
     public void cadastrar(Medico medico) throws ServiceException{
+        validar(medico);
         try{
             medicoDAO.insere(medico);
         }
@@ -35,6 +37,7 @@ public class MedicoService {
     }
 
     public void atualizar(Medico medico) throws ServiceException{
+        validar(medico);
         try{
             if(medicoDAO.buscaPorCodigo(medico.getCrmMedico()) == null){
                 throw (new ServiceException("Nenhum médico encontrado com esse CRM."));
@@ -66,5 +69,9 @@ public class MedicoService {
         catch(SQLException ex){
             throw(new ServiceException("Erro na conexão com o banco de dados"));
         }
+    }
+
+    public void validar(Medico medico) throws ServiceException{
+
     }
 }

@@ -38,8 +38,8 @@ public class ConsultaController {
     private void btnInicioOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Inicio.fxml","Inicio");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -47,8 +47,8 @@ public class ConsultaController {
     private void btnMedicosOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Medico.fxml","Medico");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -56,8 +56,8 @@ public class ConsultaController {
     private void btnConsultasOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Consultas.fxml","Consultas");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -65,8 +65,8 @@ public class ConsultaController {
     private void btnReceitasOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Receita.fxml","Receita");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -74,8 +74,8 @@ public class ConsultaController {
     private void btnPacientesOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Paciente.fxml","Pacientes");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -83,14 +83,14 @@ public class ConsultaController {
     private void btnMedicamentosOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Medicamento.fxml","Medicamentos");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
      
     @FXML
-    private void btnCadastrarConsultaOnAction(ActionEvent e) {
+    private void btnCadastrarConsultaOnAction(ActionEvent event) {
     String cpf = txtCPFPaciente.getText().trim();
     String crm = txtCRMMedico.getText().trim();
     String data = txtData.getText().trim();
@@ -117,7 +117,7 @@ public class ConsultaController {
     } catch (DateTimeParseException ex) {
         mostraMensagem(
             lblConfirmarCadastro,
-            "Data inválida. Use o formato AAAA/MM/DD.",
+            "Data inválida. Use o formato AAAA-MM-DD.",
             false
         );
     } catch (ServiceException ex) {
@@ -131,7 +131,7 @@ public class ConsultaController {
 }
     
     @FXML 
-    private void btnBuscarConsultaOnAction(ActionEvent e) {
+    private void btnBuscarConsultaOnAction(ActionEvent event) {
         String cpf = txtBuscarCPFPaciente.getText().trim();
         String crm = txtBuscarCRMMedico.getText().trim();
         String data = txtBuscarData.getText().trim();
@@ -170,12 +170,12 @@ public class ConsultaController {
     }
     
     @FXML 
-    private void btnAtualizarConsultaOnAction(ActionEvent e) { 
-        mostraMensagem(lblConfirmarAtualizar, "Consulta usa CPF, CRM e data como chave. Para alterar, remova e cadastre novamente.", false); 
+    private void btnAtualizarConsultaOnAction(ActionEvent event) { 
+        mostraMensagem(lblConfirmarAtualizar, "Consulta usa CPF, CRM e data como chave.\nPara alterar, remova e cadastre novamente.", false); 
     }
     
     @FXML 
-    private void btnRemoverConsultaOnAction(ActionEvent e) {
+    private void btnRemoverConsultaOnAction(ActionEvent event) {
         String cpf = txtRemoverCPFPaciente.getText().trim();
         String crm = txtRemoverCRMMedico.getText().trim();
         String data = txtRemoverData.getText().trim();
@@ -238,9 +238,9 @@ public class ConsultaController {
 
             mostraMensagem(lblConfirmarListar, "Listagem realizada.", true);
         }
-         catch (ServiceException e) {
-            e.printStackTrace();
-            mostraMensagem(lblConfirmarListar, e.getMessage(), false);
+         catch (ServiceException ex) {
+            ex.printStackTrace();
+            mostraMensagem(lblConfirmarListar, ex.getMessage(), false);
         }
     }
     
