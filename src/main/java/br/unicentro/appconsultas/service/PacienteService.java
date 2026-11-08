@@ -10,6 +10,7 @@ import br.unicentro.appconsultas.dao.interfaces.IPaciente;
 
 public class PacienteService {
     private final IPaciente pacienteDAO = new PacienteDAO();
+    private final VerificadorString vs = new VerificadorString();
     public void cadastrar(Paciente paciente) throws ServiceException{
         validar(paciente);
 
@@ -72,8 +73,17 @@ public class PacienteService {
     }
 
     public void validar(Paciente paciente) throws ServiceException{
+        if(!vs.naoNumerico(paciente.getNome()) || paciente.getNome().length()>60){
+            throw (new ServiceException("Insira um nome válido."));
+        }
         if (paciente.getIdade() <= 0 || paciente.getPeso() <= 0 || paciente.getAltura() <= 0) {
             throw (new ServiceException("Insira valores válidos."));
+        }
+        if (paciente.getCpfPaciente().length()!=11|| !vs.numerico(paciente.getCpfPaciente())){
+            throw (new ServiceException("O cpf deve conter somente números."));
+        }
+        if(!vs.numerico(paciente.getTelefone())){
+            throw (new ServiceException("O telefone deve conter somente números."));
         }
     }
 }

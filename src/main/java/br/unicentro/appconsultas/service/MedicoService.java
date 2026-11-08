@@ -11,7 +11,7 @@ import br.unicentro.appconsultas.dao.interfaces.IMedico;
 
 public class MedicoService {
     private final IMedico medicoDAO = new MedicoDAO();
-
+    private final VerificadorString vs = new VerificadorString();
     public void cadastrar(Medico medico) throws ServiceException{
         validar(medico);
         try{
@@ -72,6 +72,11 @@ public class MedicoService {
     }
 
     public void validar(Medico medico) throws ServiceException{
-
+        if(!vs.naoNumerico(medico.getNome())|| medico.getNome().length()>60){
+            throw (new ServiceException("Insira um nome válido."));
+        }
+        if(!vs.numerico(medico.getTelefone())){
+            throw (new ServiceException("O telefone deve conter somente números."));
+        }
     }
 }
