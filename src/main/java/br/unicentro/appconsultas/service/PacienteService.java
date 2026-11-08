@@ -11,9 +11,7 @@ import br.unicentro.appconsultas.dao.interfaces.IPaciente;
 public class PacienteService {
     private final IPaciente pacienteDAO = new PacienteDAO();
     public void cadastrar(Paciente paciente) throws ServiceException{
-        if (paciente.getIdade() <= 0 || paciente.getPeso() <= 0 || paciente.getAltura() <= 0) {
-            throw (new ServiceException("Insira valores válidos."));
-        }
+        validar(paciente);
 
         try{
             pacienteDAO.insere(paciente);
@@ -38,9 +36,7 @@ public class PacienteService {
     }
 
     public void atualizar(Paciente paciente) throws ServiceException{
-        if (paciente.getIdade() <= 0 || paciente.getPeso() <= 0 || paciente.getAltura() <= 0) {
-            throw (new ServiceException("Insira valores válidos."));
-        }
+        validar(paciente);
 
         try{
             if (pacienteDAO.buscaPorCodigo(paciente.getCpfPaciente()) == null) {
@@ -72,6 +68,12 @@ public class PacienteService {
         }
         catch(SQLException ex){
             throw(new ServiceException("Erro na conexão com o banco de dados"));
+        }
+    }
+
+    public void validar(Paciente paciente) throws ServiceException{
+        if (paciente.getIdade() <= 0 || paciente.getPeso() <= 0 || paciente.getAltura() <= 0) {
+            throw (new ServiceException("Insira valores válidos."));
         }
     }
 }

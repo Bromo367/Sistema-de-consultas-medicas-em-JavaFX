@@ -17,12 +17,7 @@ public class ConsultaService {
     private final IMedico medicoDAO = new MedicoDAO();
     public void cadastrar(Consulta consulta) throws ServiceException{
         try{
-            if (pacienteDAO.buscaPorCodigo(consulta.getCpfPaciente()) == null) {
-                throw (new ServiceException("Paciente não cadastrado. Verifique o CPF."));
-            }
-            if (medicoDAO.buscaPorCodigo(consulta.getCrmMedico()) == null) {
-                throw (new ServiceException("Médico não cadastrado. Verifique o CRM."));
-            }
+            validar(consulta);
             consultaDAO.insere(consulta);
         }
         catch(SQLException ex){
@@ -62,6 +57,15 @@ public class ConsultaService {
         }
         catch(SQLException ex){
             throw(new ServiceException("Erro na conexão com o banco de dados"));
+        }
+    }
+
+    public void validar(Consulta consulta) throws ServiceException, SQLException{
+        if (pacienteDAO.buscaPorCodigo(consulta.getCpfPaciente()) == null) {
+            throw (new ServiceException("Paciente não cadastrado. Verifique o CPF."));
+        }
+        if (medicoDAO.buscaPorCodigo(consulta.getCrmMedico()) == null) {
+            throw (new ServiceException("Médico não cadastrado. Verifique o CRM."));
         }
     }
 }

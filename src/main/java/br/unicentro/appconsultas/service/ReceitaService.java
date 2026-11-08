@@ -11,10 +11,8 @@ public class ReceitaService {
     private final IReceita receitaDAO = new ReceitaDAO();
 
     public void cadastrar(Receita receita) throws ServiceException{
+        validar(receita);
         try{
-            if (receita.getMedicamentoId() <= 0 || receita.getDose() <= 0) {
-                throw (new ServiceException("Código do medicamento e dose devem ser positivos."));
-            }
             receitaDAO.insere(receita);
         }
         catch(SQLException ex){
@@ -35,10 +33,8 @@ public class ReceitaService {
         
     }
     public void atualizar(Receita receita) throws ServiceException{
+        validar(receita);
         try{
-            if (receita.getDose() <= 0 || receita.getMedicamentoId() <= 0) { 
-                throw (new ServiceException("Código e dose devem ser positivos."));
-            }
             List<Receita> lista = receitaDAO.busca(receita.getCpfPaciente(), 
                                                     receita.getCrmMedico(),
                                                     receita.getData(),
@@ -70,6 +66,11 @@ public class ReceitaService {
         }
         catch(SQLException ex){
             throw(new ServiceException("Erro na conexão com o banco de dados"));
+        }
+    }
+    public void validar(Receita receita) throws ServiceException{
+        if (receita.getMedicamentoId() <= 0 || receita.getDose() <= 0) {
+            throw (new ServiceException("Código do medicamento e dose devem ser positivos."));
         }
     }
 }

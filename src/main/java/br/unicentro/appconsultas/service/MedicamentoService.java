@@ -12,9 +12,7 @@ public class MedicamentoService {
     private final IMedicamento medicamentoDAO = new MedicamentoDAO();
 
     public void cadastrar(Medicamento medicamento) throws ServiceException{
-        if (medicamento.getMedicamentoId() <= 0) {
-            throw(new ServiceException("O código deve ser um número positivo."));
-        }
+        
 
         try{
             if (medicamentoDAO.buscaPorCodigo(medicamento.getMedicamentoId()) != null) {
@@ -45,10 +43,8 @@ public class MedicamentoService {
     }
 
     public void atualizar(Medicamento medicamento) throws ServiceException{
+        validar(medicamento);
         try{
-            if (medicamentoDAO.buscaPorCodigo(medicamento.getMedicamentoId()) == null) { 
-                throw(new ServiceException("Medicamento não encontrado.")); 
-            } 
             medicamentoDAO.atualiza(medicamento);
         }
         catch(SQLException ex){
@@ -77,6 +73,12 @@ public class MedicamentoService {
         }
         catch(SQLException ex){
             throw(new ServiceException("Erro na conexão com o banco de dados"));
+        }
+    }
+
+    public void validar(Medicamento medicamento) throws ServiceException{
+        if (medicamento.getMedicamentoId() <= 0) {
+            throw(new ServiceException("O código deve ser um número positivo."));
         }
     }
 }
