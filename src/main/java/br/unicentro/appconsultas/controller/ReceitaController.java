@@ -285,14 +285,26 @@ public class ReceitaController {
             TableColumn<Receita, Integer> colunaMedicamento = new TableColumn("Medicamento");
             colunaMedicamento.setCellValueFactory(new  PropertyValueFactory<>("medicamentoId"));
 
+            TableColumn<Receita, Integer> colunaDose = new TableColumn("Dosagem");
+            colunaDose.setCellValueFactory(new  PropertyValueFactory<>("dose"));
+
+            TableColumn<Receita, Integer> colunaUnidade = new TableColumn("Unidade Medida");
+            colunaUnidade.setCellValueFactory(new  PropertyValueFactory<>("unidadeMedida"));
+
+            TableColumn<Receita, Integer> colunaIntervalo = new TableColumn("Intervalo");
+            colunaIntervalo.setCellValueFactory(new  PropertyValueFactory<>("intervalo"));
+
     
-            colunaCRM.setPrefWidth(160);
-            colunaCPF.setPrefWidth(160);
-            colunaData.setPrefWidth(160);
-            colunaMedicamento.setPrefWidth(160);
+            colunaCRM.setPrefWidth(92);
+            colunaCPF.setPrefWidth(92);
+            colunaData.setPrefWidth(92);
+            colunaMedicamento.setPrefWidth(92);
+            colunaDose.setPrefWidth(92);
+            colunaUnidade.setPrefWidth(92);
+            colunaIntervalo.setPrefWidth(92);
             
 
-            tabela.getColumns().addAll(colunaCRM, colunaCPF, colunaData, colunaMedicamento);
+            tabela.getColumns().addAll(colunaCRM, colunaCPF, colunaData, colunaMedicamento, colunaDose, colunaUnidade, colunaIntervalo);
 
             tabela.getItems().setAll(receitaService.listarTodos());
 

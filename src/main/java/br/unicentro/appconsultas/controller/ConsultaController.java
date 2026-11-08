@@ -117,7 +117,7 @@ public class ConsultaController {
     } catch (DateTimeParseException ex) {
         mostraMensagem(
             lblConfirmarCadastro,
-            "Data inválida. Use o formato AAAA/MM/DD.",
+            "Data inválida. Use o formato AAAA-MM-DD.",
             false
         );
     } catch (ServiceException ex) {
@@ -171,7 +171,7 @@ public class ConsultaController {
     
     @FXML 
     private void btnAtualizarConsultaOnAction(ActionEvent event) { 
-        mostraMensagem(lblConfirmarAtualizar, "Consulta usa CPF, CRM e data como chave. Para alterar, remova e cadastre novamente.", false); 
+        mostraMensagem(lblConfirmarAtualizar, "Consulta usa CPF, CRM e data como chave.\nPara alterar, remova e cadastre novamente.", false); 
     }
     
     @FXML 
