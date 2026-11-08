@@ -5,10 +5,10 @@ import java.util.List;
 
 import br.unicentro.appconsultas.model.Receita;
 import br.unicentro.appconsultas.dao.implementacoes.ReceitaDAO;
-
+import br.unicentro.appconsultas.dao.interfaces.IReceita;
 
 public class ReceitaService {
-    private final ReceitaDAO receitaDAO = new ReceitaDAO();
+    private final IReceita receitaDAO = new ReceitaDAO();
 
     public void cadastrar(Receita receita) throws ServiceException{
         try{

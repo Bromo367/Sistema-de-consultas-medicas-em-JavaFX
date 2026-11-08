@@ -6,9 +6,10 @@ import java.util.List;
 
 import br.unicentro.appconsultas.dao.implementacoes.MedicamentoDAO;
 import br.unicentro.appconsultas.model.Medicamento;
+import br.unicentro.appconsultas.dao.interfaces.IMedicamento;
 
 public class MedicamentoService {
-    private final MedicamentoDAO medicamentoDAO = new MedicamentoDAO();
+    private final IMedicamento medicamentoDAO = new MedicamentoDAO();
 
     public void cadastrar(Medicamento medicamento) throws ServiceException{
         if (medicamento.getMedicamentoId() <= 0) {
@@ -17,7 +18,6 @@ public class MedicamentoService {
 
         try{
             if (medicamentoDAO.buscaPorCodigo(medicamento.getMedicamentoId()) != null) {
-                System.out.println("OI");
                 throw(new ServiceException("Já existe um medicamento com esse código."));
             }
 

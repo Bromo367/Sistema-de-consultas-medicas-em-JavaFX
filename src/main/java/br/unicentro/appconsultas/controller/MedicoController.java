@@ -1,12 +1,9 @@
 package br.unicentro.appconsultas.controller;
 
 import br.unicentro.appconsultas.main.GerenciadorTelas;
-import br.unicentro.appconsultas.dao.implementacoes.MedicoDAO;
 import br.unicentro.appconsultas.service.MedicoService;
 import br.unicentro.appconsultas.service.ServiceException;
 import br.unicentro.appconsultas.model.Medico;
-
-import java.sql.SQLException;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -19,7 +16,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
-import java.security.Provider.Service;
 public class MedicoController {
 
     @FXML private TextField txtNome, txtCRM, txtEspecializacao, txtTelefone;
@@ -37,16 +33,14 @@ public class MedicoController {
     @FXML
     private Pane painelLista;
 
-    private final MedicoDAO medicoDAO = new MedicoDAO();
-
     private final MedicoService medicoService = new MedicoService();
 
     @FXML
     private void btnInicioOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Inicio.fxml","Inicio");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -54,8 +48,8 @@ public class MedicoController {
     private void btnMedicosOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Medico.fxml","Medico");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -63,8 +57,8 @@ public class MedicoController {
     private void btnConsultasOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Consultas.fxml","Consultas");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -72,8 +66,8 @@ public class MedicoController {
     private void btnReceitasOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Receita.fxml","Receita");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -81,8 +75,8 @@ public class MedicoController {
     private void btnPacientesOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Paciente.fxml","Pacientes");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -90,13 +84,13 @@ public class MedicoController {
     private void btnMedicamentosOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Medicamento.fxml","Medicamentos");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
 @FXML
-    private void btnCadastrarMedicoOnAction(ActionEvent e) {
+    private void btnCadastrarMedicoOnAction(ActionEvent event) {
         String crm = txtCRM.getText().trim();
         String nome = txtNome.getText().trim();
         String esp = txtEspecializacao.getText().trim();
@@ -122,7 +116,7 @@ public class MedicoController {
     }
 
     @FXML
-    private void btnBuscarMedicoOnAction(ActionEvent e) {
+    private void btnBuscarMedicoOnAction(ActionEvent event) {
         String crm = txtBuscarCRM.getText().trim();
         
         if (crm.isEmpty()) {
@@ -148,7 +142,7 @@ public class MedicoController {
     }
 
     @FXML
-    private void btnAtualizarMedicoOnAction(ActionEvent e) {
+    private void btnAtualizarMedicoOnAction(ActionEvent event) {
         String crm = txtAtualizarCRM.getText().trim();
         String nome = txtAtualizarNome.getText().trim();
         String esp = txtAtualizarEspecializacao.getText().trim();
@@ -171,7 +165,7 @@ public class MedicoController {
     }
 
     @FXML
-    private void btnRemoverMedicoOnAction(ActionEvent e) {
+    private void btnRemoverMedicoOnAction(ActionEvent event) {
         String crm = txtRemoverCRM.getText().trim();
         
         if (crm.isEmpty()) {
@@ -232,9 +226,9 @@ public class MedicoController {
 
             mostrarMensagem(lblConfirmarListar, "Listagem Realizada.", true);
         }
-         catch (ServiceException e) {
-            e.printStackTrace();
-            mostrarMensagem(lblConfirmarListar, e.getMessage(), false);
+         catch (ServiceException ex) {
+            ex.printStackTrace();
+            mostrarMensagem(lblConfirmarListar, ex.getMessage(), false);
         }
     }
 

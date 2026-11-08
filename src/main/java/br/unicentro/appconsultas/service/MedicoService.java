@@ -4,12 +4,13 @@ import java.sql.SQLException;
 import java.util.List;
 
 import br.unicentro.appconsultas.model.Medico;
-import br.unicentro.appconsultas.model.Paciente;
 import br.unicentro.appconsultas.dao.implementacoes.MedicoDAO;
+import br.unicentro.appconsultas.dao.interfaces.IMedico;
+
 
 
 public class MedicoService {
-    private final MedicoDAO medicoDAO = new MedicoDAO();
+    private final IMedico medicoDAO = new MedicoDAO();
 
     public void cadastrar(Medico medico) throws ServiceException{
         try{

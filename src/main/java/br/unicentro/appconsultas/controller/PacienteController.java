@@ -69,8 +69,8 @@ public class PacienteController {
     private void btnMedicosOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Medico.fxml","Medicos");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -78,8 +78,8 @@ public class PacienteController {
     private void btnConsultasOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Consultas.fxml","Consultas");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -87,8 +87,8 @@ public class PacienteController {
     private void btnReceitasOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Receita.fxml","Receitas");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -96,8 +96,8 @@ public class PacienteController {
     private void btnPacientesOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Paciente.fxml","Pacientes");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -105,8 +105,8 @@ public class PacienteController {
     private void btnMedicamentosOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Medicamento.fxml","Medicamentos");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -134,11 +134,11 @@ public class PacienteController {
             mostrarMensagem(lblConfirmarCadastro, "Paciente cadastrado com sucesso!", true);
             limparCadastro();
 
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException ex) {
             mostrarMensagem(lblConfirmarCadastro, "Verifique o tipo dos valores.", false);
-        } catch (ServiceException e) {
-            e.printStackTrace();
-            mostrarMensagem(lblConfirmarCadastro, e.getMessage(), false);
+        } catch (ServiceException ex) {
+            ex.printStackTrace();
+            mostrarMensagem(lblConfirmarCadastro, ex.getMessage(), false);
         }
     }
 
@@ -164,11 +164,10 @@ public class PacienteController {
             mostrarMensagem(lblConfirmarBuscar, "Paciente encontrado.", true);
 
             
-        } catch (ServiceException e) {
-            e.printStackTrace();
+        } catch (ServiceException ex) {
+            ex.printStackTrace();
             limparResultadoBusca();
-            mostrarMensagem(lblConfirmarBuscar,
-                    e.getMessage(), false);
+            mostrarMensagem(lblConfirmarBuscar, ex.getMessage(), false);
         }
     }
 
@@ -198,13 +197,12 @@ public class PacienteController {
 
             mostrarMensagem(lblConfirmarAtualizar, "Paciente atualizado com sucesso!", true);
         
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException ex) {
             mostrarMensagem(lblConfirmarAtualizar,
                     "Verifique os tipos dos valores.", false);
-        } catch (ServiceException e) {
-            e.printStackTrace();
-            mostrarMensagem(lblConfirmarAtualizar,
-                    e.getMessage(), false);
+        } catch (ServiceException ex) {
+            ex.printStackTrace();
+            mostrarMensagem(lblConfirmarAtualizar, ex.getMessage(), false);
         }
     }
 
@@ -220,10 +218,9 @@ public class PacienteController {
             pacienteService.remover(cpf);
             mostrarMensagem(lblConfirmarRemover, "Paciente removido com sucesso!", true);
             txtRemoverCPF.clear();
-        } catch (ServiceException e) {
-            e.printStackTrace();
-            mostrarMensagem(lblConfirmarRemover,
-                    e.getMessage(), false);
+        } catch (ServiceException ex) {
+            ex.printStackTrace();
+            mostrarMensagem(lblConfirmarRemover, ex.getMessage(), false);
         }
     }
 
@@ -272,9 +269,9 @@ public class PacienteController {
 
             mostrarMensagem(lblConfirmarListar, "Listagem realizada.", true);
         }
-         catch (ServiceException e) {
-            e.printStackTrace();
-            mostrarMensagem(lblConfirmarListar, e.getMessage(), false);
+         catch (ServiceException ex) {
+            ex.printStackTrace();
+            mostrarMensagem(lblConfirmarListar, ex.getMessage(), false);
         }
     }
 

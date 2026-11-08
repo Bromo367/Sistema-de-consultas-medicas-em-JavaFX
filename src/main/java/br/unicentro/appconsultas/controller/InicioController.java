@@ -16,8 +16,8 @@ public class InicioController {
     private void btnInicioOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Inicio.fxml","Inicio");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -25,8 +25,8 @@ public class InicioController {
     private void btnMedicosOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Medico.fxml","Medico");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -34,8 +34,8 @@ public class InicioController {
     private void btnConsultasOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Consultas.fxml","Consultas");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -43,8 +43,8 @@ public class InicioController {
     private void btnReceitasOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Receita.fxml","Receitas");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -52,8 +52,8 @@ public class InicioController {
     private void btnPacientesOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Paciente.fxml","Pacientes");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -61,8 +61,8 @@ public class InicioController {
     private void btnMedicamentosOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Medicamento.fxml","Medicamento");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -70,8 +70,8 @@ public class InicioController {
     private void btnNovoPacienteOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Paciente.fxml","Pacientes");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -79,8 +79,8 @@ public class InicioController {
     private void btnNovoMedicoOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Medico.fxml","Medicos");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -88,8 +88,8 @@ public class InicioController {
     private void btnNovaConsultaOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Consultas.fxml","Consultas");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 

@@ -5,10 +5,11 @@ import java.util.List;
 
 import br.unicentro.appconsultas.model.Paciente;
 import br.unicentro.appconsultas.dao.implementacoes.PacienteDAO;
+import br.unicentro.appconsultas.dao.interfaces.IPaciente;
 
 
 public class PacienteService {
-    private final PacienteDAO pacienteDAO = new PacienteDAO();
+    private final IPaciente pacienteDAO = new PacienteDAO();
     public void cadastrar(Paciente paciente) throws ServiceException{
         if (paciente.getIdade() <= 0 || paciente.getPeso() <= 0 || paciente.getAltura() <= 0) {
             throw (new ServiceException("Insira valores válidos."));

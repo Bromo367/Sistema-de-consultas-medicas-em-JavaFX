@@ -37,8 +37,8 @@ public class MedicamentoController {
     private void btnInicioOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Inicio.fxml","Inicio");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -46,8 +46,8 @@ public class MedicamentoController {
     private void btnMedicosOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Medico.fxml","Medicos");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -55,8 +55,8 @@ public class MedicamentoController {
     private void btnConsultasOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Consultas.fxml","Consultas");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -64,8 +64,8 @@ public class MedicamentoController {
     private void btnReceitasOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Receita.fxml","Receitas");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -73,8 +73,8 @@ public class MedicamentoController {
     private void btnPacientesOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Paciente.fxml","Pacientes");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -82,13 +82,13 @@ public class MedicamentoController {
     private void btnMedicamentosOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Medicamento.fxml","Medicamentos");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
     @FXML 
-    private void btnCadastrarMedicamentoOnAction(ActionEvent e) {
+    private void btnCadastrarMedicamentoOnAction(ActionEvent event) {
         String idTexto = txtMedicamentoId.getText().trim();
         String nome = txtNome.getText().trim();
 
@@ -135,7 +135,7 @@ public class MedicamentoController {
     }
 
     @FXML 
-    private void btnBuscarMedicamentoOnAction(ActionEvent e) {
+    private void btnBuscarMedicamentoOnAction(ActionEvent event) {
         String idTexto = txtBuscarMedicamentoId.getText().trim(); 
         
         if (idTexto.isEmpty()) { 
@@ -159,7 +159,7 @@ public class MedicamentoController {
     }
 
     @FXML 
-    private void btnAtualizarMedicamentoOnAction(ActionEvent e) {
+    private void btnAtualizarMedicamentoOnAction(ActionEvent event) {
         String idTexto = txtAtualizarMedicamentoId.getText().trim();
         String nome = txtAtualizarNome.getText().trim(); 
         
@@ -182,7 +182,7 @@ public class MedicamentoController {
     }
 
     @FXML 
-    private void btnRemoverMedicamentoOnAction(ActionEvent e) {
+    private void btnRemoverMedicamentoOnAction(ActionEvent event) {
         String idTexto = txtRemoverMedicamentoId.getText().trim(); 
         
         if (idTexto.isEmpty()) { 

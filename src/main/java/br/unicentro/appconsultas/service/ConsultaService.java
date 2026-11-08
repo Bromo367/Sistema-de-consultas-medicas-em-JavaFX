@@ -7,11 +7,14 @@ import br.unicentro.appconsultas.model.Consulta;
 import br.unicentro.appconsultas.dao.implementacoes.ConsultaDAO;
 import br.unicentro.appconsultas.dao.implementacoes.PacienteDAO;
 import br.unicentro.appconsultas.dao.implementacoes.MedicoDAO;
+import br.unicentro.appconsultas.dao.interfaces.IConsulta;
+import br.unicentro.appconsultas.dao.interfaces.IPaciente;
+import br.unicentro.appconsultas.dao.interfaces.IMedico;
 
 public class ConsultaService {
-    private final ConsultaDAO consultaDAO = new ConsultaDAO();
-    private final PacienteDAO pacienteDAO = new PacienteDAO();
-    private final MedicoDAO medicoDAO = new MedicoDAO();
+    private final IConsulta consultaDAO = new ConsultaDAO();
+    private final IPaciente pacienteDAO = new PacienteDAO();
+    private final IMedico medicoDAO = new MedicoDAO();
     public void cadastrar(Consulta consulta) throws ServiceException{
         try{
             if (pacienteDAO.buscaPorCodigo(consulta.getCpfPaciente()) == null) {

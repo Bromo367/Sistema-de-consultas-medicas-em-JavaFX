@@ -1,13 +1,11 @@
 package br.unicentro.appconsultas.controller;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
 import br.unicentro.appconsultas.main.GerenciadorTelas;
-import br.unicentro.appconsultas.dao.implementacoes.ReceitaDAO;
 import br.unicentro.appconsultas.model.Receita;
 import br.unicentro.appconsultas.service.ReceitaService;
 import br.unicentro.appconsultas.service.ServiceException;
@@ -37,16 +35,14 @@ public class ReceitaController {
     @FXML
     private Pane painelLista;
 
-    private final ReceitaDAO receitaDAO = new ReceitaDAO();
-
     private final ReceitaService receitaService = new ReceitaService();
     
     @FXML
     private void btnInicioOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Inicio.fxml","Inicio");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -54,8 +50,8 @@ public class ReceitaController {
     private void btnMedicosOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Medico.fxml","Medicos");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -63,8 +59,8 @@ public class ReceitaController {
     private void btnConsultasOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Consultas.fxml","Consultas");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -72,8 +68,8 @@ public class ReceitaController {
     private void btnReceitasOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Receita.fxml","Receitas");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -81,8 +77,8 @@ public class ReceitaController {
     private void btnPacientesOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Paciente.fxml","Pacientes");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -90,14 +86,14 @@ public class ReceitaController {
     private void btnMedicamentosOnAction(ActionEvent event) {
         try {
             GerenciadorTelas.trocarTela("/br/unicentro/appconsultas/view/Medicamento.fxml","Medicamentos");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
     
     @FXML
-    private void btnEmitirReceitaOnAction(ActionEvent e) {
+    private void btnEmitirReceitaOnAction(ActionEvent event) {
         String cpf = txtCPFPaciente.getText().trim();
         String crm = txtCRMMedico.getText().trim();
         String data = txtData.getText().trim();
@@ -170,7 +166,7 @@ public class ReceitaController {
 
 
     @FXML 
-    private void btnBuscarReceitaOnAction(ActionEvent e) {
+    private void btnBuscarReceitaOnAction(ActionEvent event) {
         String cpf = txtBuscarCPF.getText().trim();
         String crm = txtBuscarCRM.getText().trim();
         String data = txtBuscarData.getText().trim();
@@ -209,7 +205,7 @@ public class ReceitaController {
     }
 
     @FXML 
-    private void btnAtualizarReceitaOnAction(ActionEvent e) {
+    private void btnAtualizarReceitaOnAction(ActionEvent evebt) {
         String cpf = txtAtualizarCPFPaciente.getText().trim();
         String crm = txtAtualizarCRMMedico.getText().trim();
         String data = txtAtualizarData.getText().trim();
@@ -241,7 +237,7 @@ public class ReceitaController {
     }
 
     @FXML 
-    private void btnRemoverReceitaOnAction(ActionEvent e) {
+    private void btnRemoverReceitaOnAction(ActionEvent event) {
         String cpf = txtRemoverCPF.getText().trim();
         String crm = txtRemoverCRM.getText().trim();
         String data = txtRemoverData.getText().trim();
@@ -313,9 +309,9 @@ public class ReceitaController {
 
             mostraMensagem(lblConfirmarListar, "Listagem realizada.", true);
         }
-         catch (ServiceException e) {
-            e.printStackTrace();
-            mostraMensagem(lblConfirmarListar, e.getMessage(), false);
+         catch (ServiceException ex) {
+            ex.printStackTrace();
+            mostraMensagem(lblConfirmarListar, ex.getMessage(), false);
         }
     }
 
