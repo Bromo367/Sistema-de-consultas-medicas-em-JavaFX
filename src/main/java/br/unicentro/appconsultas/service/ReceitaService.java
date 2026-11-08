@@ -6,13 +6,17 @@ import java.util.List;
 import br.unicentro.appconsultas.model.Receita;
 import br.unicentro.appconsultas.dao.implementacoes.ReceitaDAO;
 import br.unicentro.appconsultas.dao.interfaces.IReceita;
+import br.unicentro.appconsultas.dao.implementacoes.ConsultaDAO;
+import br.unicentro.appconsultas.dao.interfaces.IConsulta;
+
 
 public class ReceitaService {
     private final IReceita receitaDAO = new ReceitaDAO();
+    private final IConsulta consultaDAO = new ConsultaDAO();
 
     public void cadastrar(Receita receita) throws ServiceException{
-        validar(receita);
         try{
+            validar(receita);
             receitaDAO.insere(receita);
         }
         catch(SQLException ex){
@@ -33,8 +37,8 @@ public class ReceitaService {
         
     }
     public void atualizar(Receita receita) throws ServiceException{
-        validar(receita);
         try{
+            validar(receita);
             List<Receita> lista = receitaDAO.busca(receita.getCpfPaciente(), 
                                                     receita.getCrmMedico(),
                                                     receita.getData(),
@@ -68,9 +72,12 @@ public class ReceitaService {
             throw(new ServiceException("Erro na conexão com o banco de dados"));
         }
     }
-    public void validar(Receita receita) throws ServiceException{
+    public void validar(Receita receita) throws ServiceException, SQLException{
         if (receita.getMedicamentoId() <= 0 || receita.getDose() <= 0) {
             throw (new ServiceException("Código do medicamento e dose devem ser positivos."));
+        }
+        if (consultaDAO.busca(receita.getCpfPaciente(), receita.getCrmMedico(), receita.getData()).isEmpty()) {
+            throw (new ServiceException("Não existe consulta com esse paciente, médico e data"));
         }
     }
 }
