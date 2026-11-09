@@ -10,10 +10,14 @@ import br.unicentro.appconsultas.main.GerenciadorTelas;
 import br.unicentro.appconsultas.model.Receita;
 import br.unicentro.appconsultas.service.ReceitaService;
 import br.unicentro.appconsultas.service.ServiceException;
+import br.unicentro.appconsultas.strategy.*;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import javafx.scene.control.ComboBox;
+import javafx.collections.FXCollections;
+
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -35,6 +39,9 @@ public class ReceitaController {
 
     @FXML
     private Pane painelLista;
+
+    @FXML
+    private ComboBox<String> cmbOrdenar;
 
     private final ReceitaService receitaService = new ReceitaService();
     
@@ -321,7 +328,31 @@ public class ReceitaController {
 
             tabela.getColumns().addAll(colunaCRM, colunaCPF, colunaData, colunaMedicamento, colunaDose, colunaUnidade, colunaIntervalo);
 
-            tabela.getItems().setAll(receitaService.listarTodos());
+            
+            String escolhaMetodo = cmbOrdenar.getValue();
+            
+            if (escolhaMetodo == null) {
+                mostraMensagem(lblConfirmarListar,
+                    "Selecione um metodo.", false);
+                    return;
+            }    
+            OrdenarReceita metodo = null;
+            
+            switch (escolhaMetodo) {
+                case "Cpf do Paciente":
+                    metodo = new OrdenarReceitaCpf();
+                    break;
+
+                case "Crm do Medico":
+                    metodo = new OrdenarReceitaCrm();
+                    break;
+
+                case "Data":
+                    metodo = new OrdenarReceitaData();
+                    break;
+            }
+
+            tabela.getItems().setAll(receitaService.listarTodos(metodo));
 
             tabela.setColumnResizePolicy(
                 TableView.CONSTRAINED_RESIZE_POLICY

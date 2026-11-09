@@ -8,6 +8,6 @@ public class OrdenarReceitaData implements OrdenarReceita{
     
     @Override
     public void ordenar(List<Receita> receitas){
-        receitas.sort((r1, r2) -> LocalDate.parse(r1.getCrmMedico()).compareTo(LocalDate.parse(r2.getCrmMedico())));
+        receitas.sort((r1, r2) -> LocalDate.parse(r1.getData()).compareTo(LocalDate.parse(r2.getData())));
     }
 }
