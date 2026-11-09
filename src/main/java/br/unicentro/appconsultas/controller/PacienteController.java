@@ -119,12 +119,6 @@ public class PacienteController {
         String pesoTexto = txtPeso.getText().trim();
         String alturaTexto = txtAltura.getText().trim();
         String telefone = txtTelefone.getText().trim();
-
-        if (cpf.isEmpty() || nome.isEmpty() || idadeTexto.isEmpty() || pesoTexto.isEmpty() || alturaTexto.isEmpty() || telefone.isEmpty()) {
-            mostrarMensagem(lblConfirmarCadastro,
-                    "Preencha todos os campos.", false);
-            return;
-        }
         try {
             int idade = Integer.parseInt(idadeTexto);
             double peso = Double.parseDouble(pesoTexto);
@@ -211,7 +205,7 @@ public class PacienteController {
                                 .altura(altura)
                                 .telefone(telefone)
                                 .build();
-                                
+
             pacienteService.atualizar(paciente);
 
             mostrarMensagem(lblConfirmarAtualizar, "Paciente atualizado com sucesso!", true);
