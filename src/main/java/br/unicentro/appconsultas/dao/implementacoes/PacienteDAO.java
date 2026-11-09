@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.unicentro.appconsultas.build.PacienteBuilder;
 import br.unicentro.appconsultas.dao.interfaces.IPaciente;
 import br.unicentro.appconsultas.model.Paciente;
 
@@ -64,7 +65,14 @@ public class PacienteDAO implements IPaciente{
                     double peso = rs.getDouble("peso");    
                     double altura = rs.getDouble("altura");  
                     String telefone = rs.getString("telefone");
-                    Paciente paciente = new Paciente(cpfPaciente, nome , idade, peso, altura, telefone);
+                    Paciente paciente = new PacienteBuilder()
+                                .cpfPaciente(cpfPaciente)
+                                .nome(nome)
+                                .idade(idade)
+                                .peso(peso)
+                                .altura(altura)
+                                .telefone(telefone)
+                                .build();
                     return paciente;
                 } 
             }
@@ -87,7 +95,14 @@ public class PacienteDAO implements IPaciente{
                 double peso = rs.getDouble("peso");    
                 double altura = rs.getDouble("altura");  
                 String telefone = rs.getString("telefone");
-                pacientes.add(new Paciente(cpfPaciente, nome , idade, peso, altura, telefone));
+                pacientes.add(new PacienteBuilder()
+                                .cpfPaciente(cpfPaciente)
+                                .nome(nome)
+                                .idade(idade)
+                                .peso(peso)
+                                .altura(altura)
+                                .telefone(telefone)
+                                .build());
             }
         }
         return pacientes;

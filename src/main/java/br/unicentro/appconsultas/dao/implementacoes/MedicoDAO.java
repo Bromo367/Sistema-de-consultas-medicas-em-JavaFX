@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.unicentro.appconsultas.model.Medico;
+import br.unicentro.appconsultas.build.MedicoBuilder;
 import br.unicentro.appconsultas.dao.interfaces.IMedico;
 
 public class MedicoDAO implements IMedico{
@@ -58,7 +59,12 @@ public class MedicoDAO implements IMedico{
                     String nome = rs.getString("nome");
                     String especializacao = rs.getString("especializacao");
                     String telefone = rs.getString("telefone");
-                    Medico medico = new Medico(crmMedico, nome, especializacao, telefone);
+                    Medico medico = new MedicoBuilder()
+                                .crmMedico(crmMedico)
+                                .nome(nome)
+                                .especializacao(especializacao)
+                                .telefone(telefone)
+                                .build();
                     return medico;
                 } 
             }
@@ -79,7 +85,13 @@ public class MedicoDAO implements IMedico{
                 String nome = rs.getString("nome");
                 String especializacao = rs.getString("especializacao");
                 String telefone = rs.getString("telefone");
-                medicos.add(new Medico(crmMedico, nome, especializacao, telefone));
+                medicos.add(new MedicoBuilder()
+                                .crmMedico(crmMedico)
+                                .nome(nome)
+                                .especializacao(especializacao)
+                                .telefone(telefone)
+                                .build()
+                            );
             }
         }
         return medicos;

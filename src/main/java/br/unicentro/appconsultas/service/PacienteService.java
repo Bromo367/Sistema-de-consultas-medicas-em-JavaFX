@@ -79,6 +79,7 @@ public class PacienteService {
         if (paciente.getIdade() <= 0 || paciente.getPeso() <= 0 || paciente.getAltura() <= 0) {
             throw (new ServiceException("Insira valores válidos."));
         }
+
         if (paciente.getCpfPaciente().length()!=11|| !vs.numerico(paciente.getCpfPaciente())){
             throw (new ServiceException("O cpf deve conter somente números."));
         }

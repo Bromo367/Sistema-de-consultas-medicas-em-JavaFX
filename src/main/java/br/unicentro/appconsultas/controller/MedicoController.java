@@ -4,6 +4,7 @@ import br.unicentro.appconsultas.main.GerenciadorTelas;
 import br.unicentro.appconsultas.service.MedicoService;
 import br.unicentro.appconsultas.service.ServiceException;
 import br.unicentro.appconsultas.model.Medico;
+import br.unicentro.appconsultas.build.MedicoBuilder;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -102,7 +103,12 @@ public class MedicoController {
         }
 
         try {
-            Medico medico = new Medico(crm, nome, esp, tel);
+            Medico medico = new MedicoBuilder()
+                                .crmMedico(crm)
+                                .nome(nome)
+                                .especializacao(esp)
+                                .telefone(tel)
+                                .build();
             medicoService.cadastrar(medico);
             mostrarMensagem(lblConfirmarCadastro, "Médico cadastrado com sucesso!", true);
             txtCRM.clear();
@@ -154,7 +160,12 @@ public class MedicoController {
         }
 
         try {
-            Medico medico = new Medico(crm, nome, esp, tel);
+            Medico medico =     new MedicoBuilder()
+                                .crmMedico(crm)
+                                .nome(nome)
+                                .especializacao(esp)
+                                .telefone(tel)
+                                .build();
             medicoService.atualizar(medico);
             mostrarMensagem(lblConfirmarAtualizar, "Médico atualizado com sucesso!", true);
             
