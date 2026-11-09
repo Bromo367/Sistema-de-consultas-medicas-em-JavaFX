@@ -8,6 +8,8 @@ import java.util.List;
 import br.unicentro.appconsultas.build.ReceitaBuilder;
 import br.unicentro.appconsultas.main.GerenciadorTelas;
 import br.unicentro.appconsultas.model.Receita;
+import br.unicentro.appconsultas.observer.ReceitaObserver;
+import br.unicentro.appconsultas.observer.ReceitaObserverConcrete;
 import br.unicentro.appconsultas.service.ReceitaService;
 import br.unicentro.appconsultas.service.ServiceException;
 import br.unicentro.appconsultas.strategy.*;
@@ -43,7 +45,10 @@ public class ReceitaController {
     @FXML
     private ComboBox<String> cmbOrdenar;
 
+    TableView<Receita> tabela;
+
     private final ReceitaService receitaService = new ReceitaService();
+    private ReceitaObserverConcrete observer;
     
     @FXML
     private void btnInicioOnAction(ActionEvent event) {
@@ -293,7 +298,8 @@ public class ReceitaController {
     private void btnListarReceitaOnAction(ActionEvent event) {
         try{
 
-            TableView<Receita> tabela = new TableView<>();
+            tabela = new TableView<>();
+
             
             TableColumn<Receita, String> colunaCPF = new TableColumn("Paciente");
             colunaCPF.setCellValueFactory(new  PropertyValueFactory<>("cpfPaciente"));
@@ -351,6 +357,13 @@ public class ReceitaController {
                     metodo = new OrdenarReceitaData();
                     break;
             }
+
+            if (observer != null) {
+                receitaService.removerObserver(observer);
+            }
+            observer = new ReceitaObserverConcrete(tabela);
+            observer.setMetodo(metodo);
+            receitaService.adicionarObserver(observer);
 
             tabela.getItems().setAll(receitaService.listarTodos(metodo));
 

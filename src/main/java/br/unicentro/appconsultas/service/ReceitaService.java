@@ -1,10 +1,12 @@
 package br.unicentro.appconsultas.service;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import br.unicentro.appconsultas.model.Receita;
 import br.unicentro.appconsultas.strategy.OrdenarReceita;
+import br.unicentro.appconsultas.observer.ReceitaObserver;
 import br.unicentro.appconsultas.dao.implementacoes.ReceitaDAO;
 import br.unicentro.appconsultas.dao.interfaces.IReceita;
 import br.unicentro.appconsultas.dao.implementacoes.ConsultaDAO;
@@ -14,11 +16,13 @@ import br.unicentro.appconsultas.dao.interfaces.IConsulta;
 public class ReceitaService {
     private final IReceita receitaDAO = new ReceitaDAO();
     private final IConsulta consultaDAO = new ConsultaDAO();
+    private final List<ReceitaObserver> observers = new ArrayList<>();
 
     public void cadastrar(Receita receita) throws ServiceException{
         try{
             validar(receita);
             receitaDAO.insere(receita);
+            notificarObservadores();
         }
         catch(SQLException ex){
             throw(new ServiceException("Erro na conexão com o banco de dados"));
@@ -48,6 +52,7 @@ public class ReceitaService {
                 throw (new ServiceException("Receita não encontrada."));
             }
             receitaDAO.atualiza(receita);
+            notificarObservadores();
         }
         catch(SQLException ex){
             throw(new ServiceException("Erro na conexão com o banco de dados"));
@@ -60,6 +65,7 @@ public class ReceitaService {
                 throw (new ServiceException("Receita não encontrada."));
             }
             receitaDAO.remove(lista.get(0));
+            notificarObservadores();
         }
         catch(SQLException ex){
             throw(new ServiceException("Erro na conexão com o banco de dados"));
@@ -85,4 +91,18 @@ public class ReceitaService {
             throw (new ServiceException("Não existe consulta com esse paciente, médico e data"));
         }
     }
+
+    public void adicionarObserver(ReceitaObserver observer) {
+        observers.add(observer);
+        }
+    public void removerObserver(ReceitaObserver observer) {
+        observers.remove(observer);
+    }
+    public void notificarObservadores() throws SQLException{
+        List<Receita> receitas = receitaDAO.listaTodos();
+        for (ReceitaObserver obs : observers) {
+            obs.listaReceitaAtualizada(new ArrayList<>(receitas));
+        }
+    }
+
 }

@@ -1,7 +1,5 @@
 package br.unicentro.appconsultas.build;
 
-
-import br.unicentro.appconsultas.model.Medico;
 import br.unicentro.appconsultas.model.Receita;
 
 public class ReceitaBuilder{
