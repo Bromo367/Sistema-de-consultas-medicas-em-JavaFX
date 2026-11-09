@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
@@ -505,9 +508,13 @@
                            <padding>
                               <Insets left="10.0" />
                            </padding>
+                           <VBox.margin>
+                              <Insets bottom="30.0" />
+                           </VBox.margin>
                         </Label>
                         <GridPane>
                            <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                            </columnConstraints>
@@ -515,19 +522,25 @@
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
-                              <Button fx:id="btnListarReceita" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#btnListarReceitaOnAction" prefHeight="35.0" prefWidth="220.0" text="Listar">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                                 <GridPane.margin>
-                                    <Insets left="90.0" top="10.0" />
-                                 </GridPane.margin>
-                              </Button>
-                              <Label fx:id="lblConfirmarListar" prefHeight="21.0" prefWidth="200.0" GridPane.columnIndex="1">
+                              <Label fx:id="lblConfirmarListar" prefHeight="21.0" prefWidth="200.0" GridPane.columnIndex="2">
                                  <font>
                                     <Font size="15.0" />
                                  </font>
                               </Label>
+                              <Button fx:id="btnListarReceita" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#btnListarReceitaOnAction" prefHeight="35.0" prefWidth="220.0" text="Listar">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Button>
+                              <ComboBox fx:id="cmbOrdenar" prefHeight="50.0" prefWidth="215.0" GridPane.columnIndex="1">
+                                 <items>
+                                    <FXCollections fx:factory="observableArrayList">
+                                          <String fx:value="Cpf do Paciente" />
+                                          <String fx:value="Crm do Medico" />
+                                          <String fx:value="Data" />
+                                    </FXCollections>
+                                 </items>
+                              </ComboBox>
                            </children>
                         </GridPane>
                         <VBox fx:id="painelLista" prefHeight="240.0" prefWidth="100.0">

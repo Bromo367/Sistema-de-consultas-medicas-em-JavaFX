@@ -7,6 +7,8 @@ import br.unicentro.appconsultas.service.BancoService;
 import br.unicentro.appconsultas.service.ServiceException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 public class InicioController {
 
@@ -95,11 +97,35 @@ public class InicioController {
 
     @FXML
     private void btnApagarTudoOnAction(ActionEvent event) {
-        try {
-            bancoService.apagarTudo();
-        } catch (ServiceException ex) { 
-            ex.printStackTrace(); 
-        }
+        Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
+
+        alerta.setTitle("Confirmar exclusão");
+        alerta.setHeaderText("Deseja realmente apagar todos os dados?");
+        
+        alerta.showAndWait().ifPresent(escolha -> {
+
+            if (escolha == ButtonType.OK) {
+                try {
+                    bancoService.apagarTudo();
+
+                    Alert sucesso = new Alert(Alert.AlertType.INFORMATION);
+                    sucesso.setTitle("Concluido");
+                    sucesso.setHeaderText("Dados apagados");
+                    sucesso.setContentText("Todos os dados foram apagados.");
+                    sucesso.showAndWait();
+
+                } catch (ServiceException ex) {
+                    ex.printStackTrace();
+
+                    Alert erro = new Alert(Alert.AlertType.ERROR);
+                    erro.setTitle("Erro");
+                    erro.setHeaderText("Ocorreu um erro ao apagar.");
+                    erro.setContentText(ex.getMessage());
+                    erro.showAndWait();
+                }
+            }
+
+        });
     }
 }
 
