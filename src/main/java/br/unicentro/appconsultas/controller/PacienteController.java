@@ -1,5 +1,6 @@
 package br.unicentro.appconsultas.controller;
 
+import br.unicentro.appconsultas.build.PacienteBuilder;
 import br.unicentro.appconsultas.main.GerenciadorTelas;
 import br.unicentro.appconsultas.model.Paciente;
 import br.unicentro.appconsultas.service.PacienteService;
@@ -129,7 +130,17 @@ public class PacienteController {
             double peso = Double.parseDouble(pesoTexto);
             double altura = Double.parseDouble(alturaTexto);
 
-            Paciente paciente = new Paciente(cpf, nome, idade, peso, altura, telefone);
+            Paciente paciente = new PacienteBuilder()
+                                .cpfPaciente(cpf)
+                                .nome(nome)
+                                .idade(idade)
+                                .peso(peso)
+                                .altura(altura)
+                                .telefone(telefone)
+                                .build();
+
+
+
             pacienteService.cadastrar(paciente);
             mostrarMensagem(lblConfirmarCadastro, "Paciente cadastrado com sucesso!", true);
             limparCadastro();
@@ -192,7 +203,15 @@ public class PacienteController {
             double peso = Double.parseDouble(pesoTexto);
             double altura = Double.parseDouble(alturaTexto);
 
-            Paciente paciente = new Paciente(cpf, nome, idade, peso, altura, telefone);
+            Paciente paciente = new PacienteBuilder()
+                                .cpfPaciente(cpf)
+                                .nome(nome)
+                                .idade(idade)
+                                .peso(peso)
+                                .altura(altura)
+                                .telefone(telefone)
+                                .build();
+                                
             pacienteService.atualizar(paciente);
 
             mostrarMensagem(lblConfirmarAtualizar, "Paciente atualizado com sucesso!", true);
