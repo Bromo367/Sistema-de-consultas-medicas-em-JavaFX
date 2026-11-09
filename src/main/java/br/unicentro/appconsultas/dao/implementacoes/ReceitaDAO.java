@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.unicentro.appconsultas.build.ReceitaBuilder;
 import br.unicentro.appconsultas.dao.interfaces.IReceita;
 import br.unicentro.appconsultas.model.Receita;
 
@@ -109,7 +110,16 @@ public class ReceitaDAO implements IReceita{
                     double dose = rs.getDouble("dose");         
                     String unidadeMedida = rs.getString("unidadeMedida");
                     String intervalo = rs.getString("intervalo");    
-                    receitas.add(new Receita(resultadoCpfPaciente, resultadoCrmMedico, resultadoData, resultadoMedicamentoId, dose, unidadeMedida, intervalo));
+                    receitas.add(new ReceitaBuilder()
+                                .cpfPaciente(resultadoCpfPaciente)
+                                .crmMedico(resultadoCrmMedico)
+                                .data(resultadoData)
+                                .medicamentoId(resultadoMedicamentoId)
+                                .dose(dose)
+                                .unidadeMedida(unidadeMedida)
+                                .intervalo(intervalo)
+                                .build()
+                            ); 
                 }
             }
         }
@@ -132,7 +142,16 @@ public class ReceitaDAO implements IReceita{
                 double dose = rs.getDouble("dose");         
                 String unidadeMedida = rs.getString("unidadeMedida");
                 String intervalo = rs.getString("intervalo");    
-                receitas.add(new Receita(cpfPaciente, crmMedico, data, medicamentoId, dose, unidadeMedida, intervalo));           
+                receitas.add(new ReceitaBuilder()
+                                .cpfPaciente(cpfPaciente)
+                                .crmMedico(crmMedico)
+                                .data(data)
+                                .medicamentoId(medicamentoId)
+                                .dose(dose)
+                                .unidadeMedida(unidadeMedida)
+                                .intervalo(intervalo)
+                                .build()
+                            );            
             }
         }
         return receitas;

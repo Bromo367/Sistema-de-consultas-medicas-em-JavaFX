@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
+import br.unicentro.appconsultas.build.ReceitaBuilder;
 import br.unicentro.appconsultas.main.GerenciadorTelas;
 import br.unicentro.appconsultas.model.Receita;
 import br.unicentro.appconsultas.service.ReceitaService;
@@ -121,9 +122,15 @@ public class ReceitaController {
 
             
 
-            Receita receita = new Receita(
-                cpf, crm, data, id, dose, unidade, intervalo
-            );
+            Receita receita = new ReceitaBuilder()
+                                .cpfPaciente(cpf)
+                                .crmMedico(crm)
+                                .data(data)
+                                .medicamentoId(id)
+                                .dose(dose)
+                                .unidadeMedida(unidade)
+                                .intervalo(intervalo)
+                                .build();
 
             receitaService.cadastrar(receita);
 
@@ -222,7 +229,15 @@ public class ReceitaController {
             LocalDate.parse(data); 
             int id = Integer.parseInt(idT); 
             double dose = Double.parseDouble(doseT.replace(',', '.')); 
-            Receita receita = new Receita(cpf, crm, data, id, dose, unidade, intervalo);
+            Receita receita = new ReceitaBuilder()
+                                .cpfPaciente(cpf)
+                                .crmMedico(crm)
+                                .data(data)
+                                .medicamentoId(id)
+                                .dose(dose)
+                                .unidadeMedida(unidade)
+                                .intervalo(intervalo)
+                                .build();
             receitaService.atualizar(receita);
             mostraMensagem(lblConfirmarAtualizar, "Receita atualizada com sucesso!", true); 
             
