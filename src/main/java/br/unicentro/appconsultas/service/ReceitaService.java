@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import br.unicentro.appconsultas.model.Receita;
+import br.unicentro.appconsultas.strategy.OrdenarReceita;
 import br.unicentro.appconsultas.dao.implementacoes.ReceitaDAO;
 import br.unicentro.appconsultas.dao.interfaces.IReceita;
 import br.unicentro.appconsultas.dao.implementacoes.ConsultaDAO;
@@ -64,9 +65,13 @@ public class ReceitaService {
             throw(new ServiceException("Erro na conexão com o banco de dados"));
         }
     }
-    public List<Receita> listarTodos() throws ServiceException{
+    public List<Receita> listarTodos (OrdenarReceita metodo) throws ServiceException{
         try{
-            return receitaDAO.listaTodos();
+            List<Receita> listaReceitas = receitaDAO.listaTodos();
+
+            metodo.ordenar(listaReceitas);
+
+            return listaReceitas;
         }
         catch(SQLException ex){
             throw(new ServiceException("Erro na conexão com o banco de dados"));

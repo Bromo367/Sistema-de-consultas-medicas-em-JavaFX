@@ -128,7 +128,7 @@ public class ReceitaDAO implements IReceita{
 
     @Override
 	public List<Receita> listaTodos() throws SQLException{
-        String sql = "SELECT * FROM receita ORDER BY cpfPaciente";
+        String sql = "SELECT * FROM receita";
         List<Receita> receitas = new ArrayList<>();
 
         try (Connection con = Conexao.getConexao();
