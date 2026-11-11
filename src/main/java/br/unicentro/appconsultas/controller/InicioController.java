@@ -8,6 +8,7 @@ import br.unicentro.appconsultas.service.ServiceException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
+
 public class InicioController {
 
     private final BancoService bancoService = new BancoService();
