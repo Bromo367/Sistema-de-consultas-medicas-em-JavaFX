@@ -74,11 +74,11 @@ public class ServiceTest {
         MedicoService medicoService = new MedicoService();
         Medico medico = new Medico(crmMedico, nome, especializacao, telefone);
         if(deveSerValido){
-            assertDoesNotThrow(() -> medicoService.validar(medico), "Deveria ser um Medico valido");
+            assertDoesNotThrow(() -> medicoService.validar(medico), "Deveria ser um medico valido");
         }
         else{
             assertThrows(ServiceException.class, 
-                    () -> medicoService.validar(medico), "Nao deveria ser um paciente valido");
+                    () -> medicoService.validar(medico), "Nao deveria ser um medico valido");
         }
         
     }
