@@ -244,7 +244,7 @@ public class ConsultaController {
         }
     }
     
-    private String validarData(String data) {
+    public String validarData(String data) {
         LocalDate.parse(data); 
         return data;
     }
