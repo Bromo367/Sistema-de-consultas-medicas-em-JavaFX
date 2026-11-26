@@ -5,7 +5,7 @@
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
     <property name="java.vm.version" value="25.0.5.1+2-1-24.04.1-Ubuntu"/>
     <property name="sun.boot.library.path" value="/usr/lib/jvm/java-25-openjdk-amd64/lib"/>
-    <property name="maven.multiModuleProjectDirectory" value="/home/heron/Arquivos/Faculdade/POO II/trab 3 poo/Sistema-de-consultas-medicas-em-JavaFX"/>
+    <property name="maven.multiModuleProjectDirectory" value="/home/heron/Arquivos/Faculdade/POO II/trab 3 poo/teste/Sistema-de-consultas-medicas-em-JavaFX"/>
     <property name="java.vm.vendor" value="Ubuntu"/>
     <property name="java.vendor.url" value="https://ubuntu.com/"/>
     <property name="guice.disable.misplaced.annotation.check" value="true"/>
@@ -15,7 +15,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="stdin.encoding" value="UTF-8"/>
     <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
-    <property name="user.dir" value="/home/heron/Arquivos/Faculdade/POO II/trab 3 poo/Sistema-de-consultas-medicas-em-JavaFX"/>
+    <property name="user.dir" value="/home/heron/Arquivos/Faculdade/POO II/trab 3 poo/teste/Sistema-de-consultas-medicas-em-JavaFX"/>
     <property name="java.vm.compressedOopsMode" value="32-bit"/>
     <property name="java.runtime.version" value="25.0.5.1+2-1-24.04.1-Ubuntu"/>
     <property name="os.arch" value="amd64"/>

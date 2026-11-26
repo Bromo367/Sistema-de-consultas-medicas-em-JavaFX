@@ -15,7 +15,6 @@ public class VerificadorStringTest{
         "'002', true",
         "'1vs2', false",
         "'batata', false",
-        "'231', true",
         "'*(123)', false",
         "'ma12Msp1-', false"
     })
@@ -34,11 +33,10 @@ public class VerificadorStringTest{
 
     @ParameterizedTest
     @CsvSource({
-        "'123', false",
-        "'002', false",
-        "'1vs2', false",
         "'batata', true",
-        "'231', false",
+        "'umdoistres', true",
+        "'123', false",
+        "'1vs2', false",
         "'*(123)', false",
         "'ma12Msp1-', false"
     })
@@ -46,10 +44,10 @@ public class VerificadorStringTest{
         VerificadorString verificador = new VerificadorString();
 
         if(deveSerValido){
-            assertTrue(verificador.numerico(s), "Deveria ser um valor nao numerico valido");
+            assertTrue(verificador.naoNumerico(s), "Deveria ser um valor nao numerico valido");
         }
         else{
-            assertFalse(verificador.numerico(s), "Nao deveria ser um valor nao numerico valido");
+            assertFalse(verificador.naoNumerico(s), "Nao deveria ser um valor nao numerico valido");
         }
     }
 }
